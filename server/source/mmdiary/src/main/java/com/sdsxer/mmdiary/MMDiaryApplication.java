@@ -1,6 +1,7 @@
 package com.sdsxer.mmdiary;
 
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -10,6 +11,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
  * Created by leon on 2017/9/14.
  */
 @SpringBootApplication
+//@MapperScan("com.sdsxer.mmdiary.repository")
 public class MMDiaryApplication extends SpringBootServletInitializer {
 
   // war entry

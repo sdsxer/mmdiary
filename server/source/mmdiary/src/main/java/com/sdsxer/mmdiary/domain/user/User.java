@@ -1,16 +1,12 @@
 package com.sdsxer.mmdiary.domain.user;
 
-//import javax.persistence.Entity;
-
-//@Entity
-public class MMUser {
+public class User {
 
   private long id;
   private String name;
   private String mobile;
   private String avatar;
   private int gender;
-
 
   public long getId() {
     return id;

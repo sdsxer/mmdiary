@@ -1,0 +1,1 @@
+insert into user(name, mobile, password, gender) values('李昂', '18810789600', '123456', 1);
