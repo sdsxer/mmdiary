@@ -5,6 +5,7 @@ public class User {
   private long id;
   private String name;
   private String mobile;
+  private String password;
   private String avatar;
   private int gender;
 
@@ -22,6 +23,14 @@ public class User {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public String getMobile() {

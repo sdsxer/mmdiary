@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Mybatis配置信息
+ * Created by leon on 2017/9/15.
+ */
 @Configuration
 @MapperScan("com.sdsxer.mmdiary.repository")
 public class MyBatisConfig {

@@ -1,6 +1,6 @@
-package com.sdsxer.mmdiary.dto;
+package com.sdsxer.mmdiary.web.response;
 
-public abstract class CommonResponse {
+public abstract class BaseResponse {
 
   protected int errorCode;
   protected String errorMessage;

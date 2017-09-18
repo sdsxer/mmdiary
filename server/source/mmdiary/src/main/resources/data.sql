@@ -1,1 +1,2 @@
-insert into user(name, mobile, password, gender) values('李昂', '18810789600', '123456', 1);
+insert into user(name, mobile, password, gender) values('李昂', '18810789600', 'E10ADC3949BA59ABBE56E057F20F883E', 1);
+insert into user(name, mobile, password, gender) values('黄青', '15011210071', 'E10ADC3949BA59ABBE56E057F20F883E', 2);
