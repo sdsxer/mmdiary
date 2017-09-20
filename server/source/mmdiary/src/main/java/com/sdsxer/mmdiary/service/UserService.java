@@ -1,6 +1,6 @@
 package com.sdsxer.mmdiary.service;
 
-import com.sdsxer.mmdiary.domain.user.User;
+import com.sdsxer.mmdiary.domain.User;
 import com.sdsxer.mmdiary.repository.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

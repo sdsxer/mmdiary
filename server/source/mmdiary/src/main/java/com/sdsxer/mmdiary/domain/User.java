@@ -1,4 +1,4 @@
-package com.sdsxer.mmdiary.domain.user;
+package com.sdsxer.mmdiary.domain;
 
 public class User {
 

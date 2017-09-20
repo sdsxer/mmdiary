@@ -15,6 +15,7 @@ public class MMDiaryApplication extends SpringBootServletInitializer {
   // war entry
   @Override
   protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+    application.profiles("dev", "jpa");
     return application.sources(MMDiaryApplication.class);
   }
 

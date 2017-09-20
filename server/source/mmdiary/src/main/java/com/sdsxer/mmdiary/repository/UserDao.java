@@ -1,6 +1,6 @@
 package com.sdsxer.mmdiary.repository;
 
-import com.sdsxer.mmdiary.domain.user.User;
+import com.sdsxer.mmdiary.domain.User;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
