@@ -1,27 +1,41 @@
-drop table if exists user;
-drop table if exists diary;
-drop table if exists comment;
+/**
+	Version: 0.0.0.1
+	Date: 2017-09-20
+	Author: leon
+**/
+CREATE DATABASE `mmdiary` DEFAULT CHARSET utf8;
 
-create table user (
-	id bigint not null auto_increment,
-	name varchar(20) not null,
-	mobile char(11) not null,
-	password char(32) not null,
-  gender tinyint not null,
-	primary key (id)
-);
+USE `mmdiary`;
 
-create table diary (
-	id bigint not null auto_increment,
-	title varchar(20) not null,
-	content char(11) not null,
-	password char(32) not null,
-  gender tinyint not null,
-	primary key (id)
-);
+DROP TABLE IF EXISTS `diary`;
+DROP TABLE IF EXISTS `comment`;
+DROP TABLE IF EXISTS `user`;
 
-create table comment (
-	id bigint not null auto_increment,
-	content varchar(20) not null,
-	primary key (id)
+CREATE TABLE `user` (
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(20) NOT NULL DEFAULT '',
+	`mobile` CHAR(11) NOT NULL DEFAULT '',
+	`password` CHAR(32) NOT NULL DEFAULT '',
+  `gender` TINYINT NOT NULL DEFAULT 0,
+	PRIMARY KEY (`id`)
+)ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `diary` (
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+	`title` VARCHAR(128) NOT NULL DEFAULT '',
+	`content` VARCHAR(1024) NOT NULL DEFAULT '',
+	`cover_url` VARCHAR(128) NOT NULL DEFAULT '',
+	`user_id` BIGINT(20) NOT NULL,
+	PRIMARY KEY (`id`),
+	FOREIGN KEY (`user_id`) REFERENCES `mmdiary`.`user`(`id`)
+)ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `comment` (
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+	`content` VARCHAR(512) NOT NULL DEFAULT '',
+	`diary_id` BIGINT(20) NOT NULL,
+	`user_id` BIGINT(20) NOT NULL,
+	PRIMARY KEY (`id`),
+	FOREIGN KEY (`diary_id`) REFERENCES `mmdiary`.`diary`(`id`),
+	FOREIGN KEY (`user_id`) REFERENCES `mmdiary`.`user`(`id`)
 );
