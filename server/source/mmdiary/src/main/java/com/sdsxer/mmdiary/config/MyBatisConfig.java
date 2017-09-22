@@ -13,18 +13,18 @@ import org.springframework.context.annotation.Profile;
  * Mybatis配置信息
  * Created by leon on 2017/9/15.
  */
-@Configuration
-@Profile("mybatis")
-@MapperScan("com.sdsxer.mmdiary.repository")
+//@Profile("mybatis")
+//@Configuration
+//@MapperScan("com.sdsxer.mmdiary.mapper")
 public class MybatisConfig {
 
-  @Autowired
-  private DataSource dataSource;
-
-  @Bean
-  public SqlSessionFactory mybatisSqlSessionFactory() throws Exception {
-    SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-    sessionFactory.setDataSource(dataSource);
-    return sessionFactory.getObject();
-  }
+//  @Autowired
+//  private DataSource dataSource;
+//
+//  @Bean
+//  public SqlSessionFactory mybatisSqlSessionFactory() throws Exception {
+//    SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
+//    sessionFactory.setDataSource(dataSource);
+//    return sessionFactory.getObject();
+//  }
 }

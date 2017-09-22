@@ -1,16 +1,22 @@
 package com.sdsxer.mmdiary.domain;
 
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "diary")
 public class Diary {
 
+  @Id
   private long id;
   private String title;
   private String content;
-  private int attachmentType;
-  private String attachmentUrl;
-  private User author;
-  private List<Comment> comments;
+  @Column(name = "cover_url")
+  private String coverUrl;
+  @Column(name = "user_id")
+  private long userId;
 
   public long getId() {
     return id;
@@ -36,35 +42,19 @@ public class Diary {
     this.content = content;
   }
 
-  public int getAttachmentType() {
-    return attachmentType;
+  public String getCoverUrl() {
+    return coverUrl;
   }
 
-  public void setAttachmentType(int attachmentType) {
-    this.attachmentType = attachmentType;
+  public void setCoverUrl(String coverUrl) {
+    this.coverUrl = coverUrl;
   }
 
-  public String getAttachmentUrl() {
-    return attachmentUrl;
+  public long getUserId() {
+    return userId;
   }
 
-  public void setAttachmentUrl(String attachmentUrl) {
-    this.attachmentUrl = attachmentUrl;
-  }
-
-  public User getAuthor() {
-    return author;
-  }
-
-  public void setAuthor(User author) {
-    this.author = author;
-  }
-
-  public List<Comment> getComments() {
-    return comments;
-  }
-
-  public void setComments(List<Comment> comments) {
-    this.comments = comments;
+  public void setUserId(long userId) {
+    this.userId = userId;
   }
 }

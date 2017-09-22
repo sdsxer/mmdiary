@@ -1,5 +1,9 @@
 package com.sdsxer.mmdiary.repository;
 
-public interface CommentDao {
+
+import com.sdsxer.mmdiary.domain.Comment;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CommentDao extends JpaRepository<Comment, Long> {
 
 }

@@ -4,6 +4,10 @@
 	Author: leon
 **/
 
+CREATE DATABASE `mmdiary` DEFAULT CHARSET utf8;
+
+USE `mmdiary`;
+
 DROP TABLE IF EXISTS `diary`;
 DROP TABLE IF EXISTS `comment`;
 DROP TABLE IF EXISTS `user`;
@@ -16,7 +20,7 @@ CREATE TABLE `user` (
   `gender` TINYINT NOT NULL DEFAULT 0,
 	`avatar_url` VARCHAR(128) NOT NULL DEFAULT '',
 	PRIMARY KEY (`id`)
-);
+)ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE `diary` (
 	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
@@ -26,7 +30,7 @@ CREATE TABLE `diary` (
 	`user_id` BIGINT(20) NOT NULL,
 	PRIMARY KEY (`id`),
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
-);
+)ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE `comment` (
 	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
@@ -36,4 +40,4 @@ CREATE TABLE `comment` (
 	PRIMARY KEY (`id`),
 	FOREIGN KEY (`diary_id`) REFERENCES `diary`(`id`),
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
-);
+)ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;

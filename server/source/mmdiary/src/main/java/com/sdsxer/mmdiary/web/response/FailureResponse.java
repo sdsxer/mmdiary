@@ -1,14 +1,16 @@
 package com.sdsxer.mmdiary.web.response;
 
+import com.sdsxer.mmdiary.common.ErrorCode;
+
 public class FailureResponse extends BaseResponse {
 
   public FailureResponse() {
-    this.errorCode = -1;
-    this.errorMessage = "unknown";
+    this.errorCode = ErrorCode.FAILED;
+    this.errorMessage = ErrorCode.getErrorMessage(this.errorCode);
   }
 
-  public FailureResponse(int errorCode, String errorMessage) {
+  public FailureResponse(int errorCode) {
     this.errorCode = errorCode;
-    this.errorMessage = errorMessage;
+    this.errorMessage = ErrorCode.getErrorMessage(this.errorCode);
   }
 }

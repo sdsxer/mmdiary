@@ -1,10 +1,21 @@
 package com.sdsxer.mmdiary.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "comment")
 public class Comment {
 
+  @Id
   private long id;
   private String content;
-  private User author;
+  @Column(name = "user_id")
+  private long userId;
+  @Column(name = "diary_id")
+  private long diaryId;
 
   public long getId() {
     return id;
@@ -22,11 +33,11 @@ public class Comment {
     this.content = content;
   }
 
-  public User getAuthor() {
-    return author;
+  public long getDiaryId() {
+    return diaryId;
   }
 
-  public void setAuthor(User author) {
-    this.author = author;
+  public void setDiaryId(long diaryId) {
+    this.diaryId = diaryId;
   }
 }

@@ -1,29 +1,20 @@
-package com.sdsxer.mmdiary.domain;
+package com.sdsxer.mmdiary.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity
-@Table(name = "user")
-public class User {
+import com.sdsxer.mmdiary.domain.User;
 
-  @Id
-  private long id;
+public class UserDto {
+
   private String name;
   private String mobile;
-  private String password;
-  @Column(name = "avatar_url")
   private String avatarUrl;
   private int gender;
 
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
+  public UserDto(User user) {
+    this.name = user.getName();
+    this.mobile = user.getMobile();
+    this.avatarUrl = user.getAvatarUrl();
+    this.gender = user.getGender();
   }
 
   public String getName() {
@@ -32,14 +23,6 @@ public class User {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
   }
 
   public String getMobile() {

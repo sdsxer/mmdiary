@@ -2,6 +2,8 @@ package com.sdsxer.mmdiary.config;
 
 import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
+import org.h2.server.web.WebServlet;
+import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -16,8 +18,8 @@ import org.springframework.jndi.JndiObjectFactoryBean;
 @Configuration
 public class DataSourceConfig {
 
-  @Bean
   @Profile("dev")
+  @Bean
   public DataSource dataSourceEmbedded() {
     return new EmbeddedDatabaseBuilder()
         .setType(EmbeddedDatabaseType.H2)
@@ -25,8 +27,16 @@ public class DataSourceConfig {
         .build();
   }
 
-  @Bean
+//  @Profile("dev")
+//  @Bean
+//  public ServletRegistrationBean h2servletRegistration() {
+//    ServletRegistrationBean registration = new ServletRegistrationBean(new WebServlet());
+//    registration.addUrlMappings("/console/*");
+//    return registration;
+//  }
+
   @Profile("qa")
+  @Bean
   public BasicDataSource dataSourcePool() {
     BasicDataSource basicDataSource = new BasicDataSource();
     basicDataSource.setDriverClassName("com.mysql.jdbc.Driver");
@@ -38,8 +48,8 @@ public class DataSourceConfig {
     return basicDataSource;
   }
 
-  @Bean
   @Profile("prod")
+  @Bean
   public DataSource dataSourceLookup() {
     JndiObjectFactoryBean jndiObjectFactoryBean = new JndiObjectFactoryBean();
     jndiObjectFactoryBean.setJndiName("java:comp/env/jdbc/mmdiary");

@@ -1,11 +1,10 @@
 package com.sdsxer.mmdiary.repository;
 
+
 import com.sdsxer.mmdiary.domain.User;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserDao {
+public interface UserDao extends JpaRepository<User, Long> {
 
-  @Select("select * from user where mobile = #{mobile}")
-  public User findByMobile(@Param("mobile") String mobile);
+  public User findByMobile(String mobile);
 }
