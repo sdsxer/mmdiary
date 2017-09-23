@@ -11,6 +11,7 @@ public class LoginResponse extends SuccessResponse {
 
   public LoginResponse(String token, User user) {
     this.user = new UserDto(user);
+    this.token = token;
   }
 
   public UserDto getUser() {

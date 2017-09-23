@@ -1,8 +1,16 @@
 package com.sdsxer.mmdiary.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -10,13 +18,16 @@ import javax.persistence.Table;
 public class User {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
   private String name;
   private String mobile;
   private String password;
-  @Column(name = "avatar_url")
   private String avatarUrl;
   private int gender;
+
+  @OneToMany(cascade= {CascadeType.ALL}, fetch= FetchType.LAZY,  mappedBy= "user")
+  private List<Diary> diaries = new ArrayList<>();
 
   public long getId() {
     return id;
@@ -64,5 +75,13 @@ public class User {
 
   public void setGender(int gender) {
     this.gender = gender;
+  }
+
+  public List<Diary> getDiaries() {
+    return diaries;
+  }
+
+  public void setDiaries(List<Diary> diaries) {
+    this.diaries = diaries;
   }
 }

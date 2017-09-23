@@ -5,16 +5,26 @@ import com.sdsxer.mmdiary.domain.User;
 
 public class UserDto {
 
+  private long id;
   private String name;
   private String mobile;
   private String avatarUrl;
   private int gender;
 
   public UserDto(User user) {
+    this.id = user.getId();
     this.name = user.getName();
     this.mobile = user.getMobile();
     this.avatarUrl = user.getAvatarUrl();
     this.gender = user.getGender();
+  }
+
+  public long getId() {
+    return id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
   }
 
   public String getName() {

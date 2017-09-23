@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Profile;
 //@Profile("mybatis")
 //@Configuration
 //@MapperScan("com.sdsxer.mmdiary.mapper")
-public class MybatisConfig {
+public class MyBatisConfig {
 
 //  @Autowired
 //  private DataSource dataSource;

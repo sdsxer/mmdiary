@@ -27,10 +27,13 @@ public class JpaConfig {
     return sessionFactory;
   }
 
+
   @Bean
   @Profile("dev")
   public Properties devProperties() {
     Properties properties = new Properties();
+    properties.setProperty("hibernate.show_sql", "true");
+    properties.setProperty("hibernate.hbm2ddl.auto", "validate");
     properties.setProperty("dialect", "org.hibernate.dialect.H2Dialect");
     return properties;
   }

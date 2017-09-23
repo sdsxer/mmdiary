@@ -1,8 +1,12 @@
 package com.sdsxer.mmdiary.domain;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -10,12 +14,17 @@ import javax.persistence.Table;
 public class Comment {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
   private String content;
-  @Column(name = "user_id")
-  private long userId;
-  @Column(name = "diary_id")
-  private long diaryId;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "userId")
+  private User user;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "diaryId")
+  private Diary diary;
 
   public long getId() {
     return id;
@@ -33,11 +42,19 @@ public class Comment {
     this.content = content;
   }
 
-  public long getDiaryId() {
-    return diaryId;
+  public User getUser() {
+    return user;
   }
 
-  public void setDiaryId(long diaryId) {
-    this.diaryId = diaryId;
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public Diary getDiary() {
+    return diary;
+  }
+
+  public void setDiary(Diary diary) {
+    this.diary = diary;
   }
 }

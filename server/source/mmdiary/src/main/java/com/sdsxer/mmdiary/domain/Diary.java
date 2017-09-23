@@ -1,8 +1,16 @@
 package com.sdsxer.mmdiary.domain;
 
-import javax.persistence.Column;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -10,13 +18,19 @@ import javax.persistence.Table;
 public class Diary {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
   private String title;
   private String content;
-  @Column(name = "cover_url")
   private String coverUrl;
-  @Column(name = "user_id")
-  private long userId;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "userId")
+  private User user;
+
+  @OneToMany(cascade= {CascadeType.ALL}, fetch= FetchType.LAZY, mappedBy = "diary")
+  private List<Comment> comments = new ArrayList<>();
+
 
   public long getId() {
     return id;
@@ -50,11 +64,19 @@ public class Diary {
     this.coverUrl = coverUrl;
   }
 
-  public long getUserId() {
-    return userId;
+  public User getUser() {
+    return user;
   }
 
-  public void setUserId(long userId) {
-    this.userId = userId;
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public List<Comment> getComments() {
+    return comments;
+  }
+
+  public void setComments(List<Comment> comments) {
+    this.comments = comments;
   }
 }

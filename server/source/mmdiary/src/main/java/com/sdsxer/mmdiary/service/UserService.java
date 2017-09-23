@@ -13,9 +13,6 @@ public class UserService {
   private UserDao userDao;
 
   public User login(String mobile) {
-
-//    List<User> userList = userDao.findAll();
-//    System.out.println(userList);
     return userDao.findByMobile(mobile);
   }
 }

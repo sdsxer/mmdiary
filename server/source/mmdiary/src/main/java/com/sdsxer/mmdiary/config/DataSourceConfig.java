@@ -18,22 +18,30 @@ import org.springframework.jndi.JndiObjectFactoryBean;
 @Configuration
 public class DataSourceConfig {
 
+  /**
+   * 如果hibernate.hbm2ddl.auto属性为none，数据库会执行schema.sql创建，并且加载data.sql导入数据
+   * 如果hibernate.hbm2ddl.auto属性为create或create-drop，嵌入式数据库会从Entity自动创建表，并且加载import.sql
+   * @return
+   */
   @Profile("dev")
   @Bean
   public DataSource dataSourceEmbedded() {
     return new EmbeddedDatabaseBuilder()
         .setType(EmbeddedDatabaseType.H2)
-        .addDefaultScripts()
+//        .addScript("classpath:schema.sql")
+//        .addScript("classpath:import.sql")
+//        .addScript("classpath:data.sql")
+        .setScriptEncoding("utf-8")
         .build();
   }
 
-//  @Profile("dev")
-//  @Bean
-//  public ServletRegistrationBean h2servletRegistration() {
-//    ServletRegistrationBean registration = new ServletRegistrationBean(new WebServlet());
-//    registration.addUrlMappings("/console/*");
-//    return registration;
-//  }
+  @Profile("dev")
+  @Bean
+  public ServletRegistrationBean h2servletRegistration() {
+    ServletRegistrationBean registration = new ServletRegistrationBean(new WebServlet());
+    registration.addUrlMappings("/console/*");
+    return registration;
+  }
 
   @Profile("qa")
   @Bean

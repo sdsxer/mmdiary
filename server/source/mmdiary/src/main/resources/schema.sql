@@ -15,6 +15,7 @@ CREATE TABLE `user` (
 	`password` CHAR(32) NOT NULL DEFAULT '',
   `gender` TINYINT NOT NULL DEFAULT 0,
 	`avatar_url` VARCHAR(128) NOT NULL DEFAULT '',
+	`testex` VARCHAR(128) NOT NULL DEFAULT '',
 	PRIMARY KEY (`id`)
 );
 
@@ -24,6 +25,7 @@ CREATE TABLE `diary` (
 	`content` VARCHAR(1024) NOT NULL DEFAULT '',
 	`cover_url` VARCHAR(128) NOT NULL DEFAULT '',
 	`user_id` BIGINT(20) NOT NULL,
+	`site_url` INT,
 	PRIMARY KEY (`id`),
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
 );
