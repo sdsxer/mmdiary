@@ -19,12 +19,12 @@ public class GuavaTokenManager implements TokenManager {
   }
 
   @Override
-  public String getToken(String authentication) {
-    return null;
+  public long getUserId(String token) {
+    return 0;
   }
 
   @Override
-  public void deleteToken(long userId) {
+  public void deleteToken(String token) {
 
   }
 }

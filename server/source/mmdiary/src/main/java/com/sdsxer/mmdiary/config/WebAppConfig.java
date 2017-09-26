@@ -41,17 +41,13 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
       }
 
       // 验证Token是否有效
-      String token = request.getHeader("token");
-
-      if(token == null || token.isEmpty()) {
+      String token = request.getHeader("Token");
+      boolean valid = tokenManager.checkToken(token);
+      if(valid) {
         return true;
       }
 
-
-//      response.sendRedirect(request.getContextPath() + loginUrl);
-
-
-
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return false;
     }
 
