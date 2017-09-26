@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.sdsxer.mmdiary.common.Constants;
 import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.RedisTemplate;
 //import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
@@ -20,14 +21,8 @@ public class RedisTokenManager implements TokenManager {
   @Autowired
   private TokenGenerator tokenGenerator;
 
-  private RedisTemplate<String, Long> redis;
-
   @Autowired
-  public void setRedis(RedisTemplate redis) {
-    this.redis = redis;
-    // 泛型设置成Long后必须更改对应的序列化方案
-//    redis.setKeySerializer(new JdkSerializationRedisSerializer());
-  }
+  private RedisTemplate<String, Long> redis;
 
 
   @Override
@@ -35,7 +30,7 @@ public class RedisTokenManager implements TokenManager {
     String token = tokenGenerator.next();
     // 存储到redis并设置过期时间
     redis.boundValueOps(token).set(userId, Constants.TOKEN_EXPIRES_HOUR, TimeUnit.HOURS);
-    return null;
+    return token;
   }
 
   @Override

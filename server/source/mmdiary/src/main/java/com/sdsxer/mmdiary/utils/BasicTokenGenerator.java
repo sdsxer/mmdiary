@@ -4,9 +4,11 @@ import java.security.SecureRandom;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 @Component
+@Primary
 public class BasicTokenGenerator implements TokenGenerator {
 
   private static final String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

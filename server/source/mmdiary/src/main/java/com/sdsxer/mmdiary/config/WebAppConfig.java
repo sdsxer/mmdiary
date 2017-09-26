@@ -33,20 +33,21 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         Object handler)
         throws Exception {
 
-      // 是否登录请求
+      // login request, ignore
       String requestServletPath = request.getServletPath();
       if(!Strings.isNullOrEmpty(requestServletPath)
           && requestServletPath.equalsIgnoreCase("/user/login")) {
         return true;
       }
 
-      // 验证Token是否有效
+      // check token's validation
       String token = request.getHeader("Token");
       boolean valid = tokenManager.checkToken(token);
-      if(valid) {
+      if(valid) { // valid token, ignore
         return true;
       }
 
+      // send response
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return false;
     }
