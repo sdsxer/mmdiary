@@ -1,15 +1,18 @@
 package com.sdsxer.mmdiary;
 
 
+import com.sdsxer.mmdiary.storage.StorageProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 /**
  * Created by leon on 2017/9/14.
  */
 @SpringBootApplication
+@EnableConfigurationProperties(StorageProperties.class)
 public class MMDiaryApplication extends SpringBootServletInitializer {
 
   // war entry

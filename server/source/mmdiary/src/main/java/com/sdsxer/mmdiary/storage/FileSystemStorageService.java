@@ -1,11 +1,13 @@
 package com.sdsxer.mmdiary.storage;
 
+import com.sdsxer.mmdiary.utils.FileUtils;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -25,8 +27,29 @@ public class FileSystemStorageService implements StorageService {
         this.rootLocation = Paths.get(properties.getLocation());
     }
 
+//    @Override
+//    public void store(MultipartFile file) {
+//        String filename = StringUtils.cleanPath(file.getOriginalFilename());
+//        try {
+//            if (file.isEmpty()) {
+//                throw new StorageException("Failed to store empty file " + filename);
+//            }
+//            if (filename.contains("..")) {
+//                // This is a security check
+//                throw new StorageException(
+//                        "Cannot store file with relative path outside current directory "
+//                                + filename);
+//            }
+//            Files.copy(file.getInputStream(), this.rootLocation.resolve(filename),
+//                    StandardCopyOption.REPLACE_EXISTING);
+//        }
+//        catch (IOException e) {
+//            throw new StorageException("Failed to store file " + filename, e);
+//        }
+//    }
+
     @Override
-    public void store(MultipartFile file) {
+    public String store(MultipartFile file) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if (file.isEmpty()) {
@@ -35,15 +58,20 @@ public class FileSystemStorageService implements StorageService {
             if (filename.contains("..")) {
                 // This is a security check
                 throw new StorageException(
-                        "Cannot store file with relative path outside current directory "
-                                + filename);
+                    "Cannot store file with relative path outside current directory "
+                        + filename);
             }
+
+            String fileSuffix = FileUtils.getFileSuffix(filename);
+            filename = UUID.randomUUID() + "." + fileSuffix;
+
             Files.copy(file.getInputStream(), this.rootLocation.resolve(filename),
-                    StandardCopyOption.REPLACE_EXISTING);
+                StandardCopyOption.REPLACE_EXISTING);
         }
         catch (IOException e) {
             throw new StorageException("Failed to store file " + filename, e);
         }
+        return filename;
     }
 
     @Override
