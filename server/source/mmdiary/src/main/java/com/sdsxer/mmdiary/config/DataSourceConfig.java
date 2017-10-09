@@ -1,5 +1,6 @@
 package com.sdsxer.mmdiary.config;
 
+import com.sdsxer.mmdiary.common.Constants;
 import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.h2.server.web.WebServlet;
@@ -23,7 +24,7 @@ public class DataSourceConfig {
    * 如果hibernate.hbm2ddl.auto属性为create或create-drop，嵌入式数据库会从Entity自动创建表，并且加载import.sql
    * @return
    */
-  @Profile("dev")
+  @Profile(Constants.CONFIG_ENV_DEV)
   @Bean
   public DataSource dataSourceEmbedded() {
     return new EmbeddedDatabaseBuilder()
@@ -35,7 +36,7 @@ public class DataSourceConfig {
         .build();
   }
 
-  @Profile("dev")
+  @Profile(Constants.CONFIG_ENV_DEV)
   @Bean
   public ServletRegistrationBean h2servletRegistration() {
     ServletRegistrationBean registration = new ServletRegistrationBean(new WebServlet());
@@ -43,7 +44,7 @@ public class DataSourceConfig {
     return registration;
   }
 
-  @Profile("qa")
+  @Profile(Constants.CONFIG_ENV_QA)
   @Bean
   public BasicDataSource dataSourcePool() {
     BasicDataSource basicDataSource = new BasicDataSource();
@@ -56,7 +57,7 @@ public class DataSourceConfig {
     return basicDataSource;
   }
 
-  @Profile("prod")
+  @Profile(Constants.CONFIG_ENV_PROD)
   @Bean
   public DataSource dataSourceLookup() {
     JndiObjectFactoryBean jndiObjectFactoryBean = new JndiObjectFactoryBean();

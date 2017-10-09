@@ -14,4 +14,11 @@ public class Constants {
 
   public static final Set<String> SUPPORTED_IMAGE_FORMAT
       = new HashSet<String>(Arrays.asList("png", "jpg", "jpeg", "gif"));
+
+  public static final String CONFIG_ENV_DEV = "dev";
+  public static final String CONFIG_ENV_QA = "qa";
+  public static final String CONFIG_ENV_PROD = "prod";
+
+  public static final String CONFIG_ORM_JPA = "jpa";
+  public static final String CONFIG_ORM_MYBATIS = "mybatis";
 }

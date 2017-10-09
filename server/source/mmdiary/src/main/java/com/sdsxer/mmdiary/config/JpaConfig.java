@@ -1,5 +1,6 @@
 package com.sdsxer.mmdiary.config;
 
+import com.sdsxer.mmdiary.common.Constants;
 import java.util.Properties;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 
-@Profile("jpa")
 @Configuration
+@Profile(Constants.CONFIG_ORM_JPA)
 public class JpaConfig {
 
   @Autowired
@@ -29,7 +30,7 @@ public class JpaConfig {
 
 
   @Bean
-  @Profile("dev")
+  @Profile(Constants.CONFIG_ENV_DEV)
   public Properties devProperties() {
     Properties properties = new Properties();
     properties.setProperty("hibernate.show_sql", "true");
@@ -39,7 +40,7 @@ public class JpaConfig {
   }
 
   @Bean
-  @Profile("qa")
+  @Profile(Constants.CONFIG_ENV_QA)
   public Properties qaProperties() {
     Properties properties = new Properties();
     properties.setProperty("dialect", "org.hibernate.dialect.MySQLDialect");
@@ -47,7 +48,7 @@ public class JpaConfig {
   }
 
   @Bean
-  @Profile("prod")
+  @Profile(Constants.CONFIG_ENV_PROD)
   public Properties prodProperties() {
     Properties properties = new Properties();
     properties.setProperty("dialect", "org.hibernate.dialect.MySQLDialect");

@@ -1,6 +1,7 @@
 package com.sdsxer.mmdiary;
 
 
+import com.sdsxer.mmdiary.common.Constants;
 import com.sdsxer.mmdiary.storage.StorageProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,7 +19,7 @@ public class MMDiaryApplication extends SpringBootServletInitializer {
   // war entry
   @Override
   protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-    application.profiles("dev", "jpa");
+    application.profiles(Constants.CONFIG_ENV_DEV, Constants.CONFIG_ORM_JPA);
     return application.sources(MMDiaryApplication.class);
   }
 
