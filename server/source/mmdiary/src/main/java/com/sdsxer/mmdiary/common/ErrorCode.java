@@ -20,11 +20,13 @@ public class ErrorCode {
 
   public class Diary {
     private static final int BASE = 200;
-    public static final int EMPTY_TITLE = 201;
-    public static final int EMPTY_CONTENT = 202;
-    public static final int EMPTY_COVER_IMAGE = 203;
-    public static final int ILLEGAL_IMAGE_FORMAT = 204;
-    public static final int FAILED_TO_SAVE_IMAGE = 205;
+    public static final int EMPTY_TITLE = BASE +1;
+    public static final int EMPTY_CONTENT = BASE + 2;
+    public static final int EMPTY_COVER_IMAGE = BASE + 3;
+    public static final int ILLEGAL_IMAGE_FORMAT = BASE + 4;
+    public static final int FAILED_TO_SAVE_IMAGE = BASE + 5;
+    public static final int ILLEGAL_ID = BASE + 6;
+    public static final int DIARY_NOT_EXIST = BASE + 7;
   }
 
   public class Comment {
@@ -45,6 +47,7 @@ public class ErrorCode {
     codeMessageMap.put(Diary.EMPTY_COVER_IMAGE, "封面图片不能为空");
     codeMessageMap.put(Diary.ILLEGAL_IMAGE_FORMAT, "无效的图片格式");
     codeMessageMap.put(Diary.FAILED_TO_SAVE_IMAGE, "无法保存图片");
+    codeMessageMap.put(Diary.ILLEGAL_ID, "无效的ID");
   }
 
   public static String getErrorMessage(int errorCode) {

@@ -27,4 +27,8 @@ public class DiaryService {
     diary.setLastModifiedTime(now);
     return diaryDao.save(diary);
   }
+
+  public Diary retrieveDiary(long diaryId) {
+    return diaryDao.findOne(diaryId);
+  }
 }
