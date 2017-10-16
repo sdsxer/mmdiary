@@ -10,6 +10,12 @@ public class ErrorCode {
   public static final int SUCCESS = 0;
   public static final int FAILED = -1;
 
+  public class Common {
+    private static final int BASE = 0;
+    public static final int UNAUTHORIZED = BASE + 1;
+    public static final int ILLEGAL_PARAM = BASE + 2;
+  }
+
   public class User {
     private static final int BASE = 100;
     public static final int EMPTY_MOBILE_OR_PASSWORD = BASE + 1;
@@ -36,6 +42,8 @@ public class ErrorCode {
   static {
     codeMessageMap.put(SUCCESS, "请求成功");
     codeMessageMap.put(FAILED, "未知错误");
+    codeMessageMap.put(Common.UNAUTHORIZED, "没有权限");
+    codeMessageMap.put(Common.ILLEGAL_PARAM, "非法的参数");
 
     codeMessageMap.put(User.EMPTY_MOBILE_OR_PASSWORD, "手机或密码不能为空");
     codeMessageMap.put(User.USER_NOT_EXIST, "用户不存在");
