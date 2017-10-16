@@ -1,5 +1,6 @@
 package com.sdsxer.mmdiary.domain;
 
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -25,6 +26,9 @@ public class Comment {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "diaryId")
   private Diary diary;
+
+  private Date createTime;
+  private Date lastModifiedTime;
 
   public long getId() {
     return id;
@@ -56,5 +60,21 @@ public class Comment {
 
   public void setDiary(Diary diary) {
     this.diary = diary;
+  }
+
+  public Date getCreateTime() {
+    return createTime;
+  }
+
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
+  }
+
+  public Date getLastModifiedTime() {
+    return lastModifiedTime;
+  }
+
+  public void setLastModifiedTime(Date lastModifiedTime) {
+    this.lastModifiedTime = lastModifiedTime;
   }
 }

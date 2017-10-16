@@ -14,6 +14,7 @@ public class ErrorCode {
     private static final int BASE = 0;
     public static final int UNAUTHORIZED = BASE + 1;
     public static final int ILLEGAL_PARAM = BASE + 2;
+    public static final int OPERATION_EXCEPTION = BASE + 3;
   }
 
   public class User {
@@ -37,6 +38,8 @@ public class ErrorCode {
 
   public class Comment {
     private static final int BASE = 300;
+    public static final int EMPTY_CONTENT = BASE + 1;
+    public static final int COMMENT_NOT_EXIST = BASE + 2;
   }
 
   static {
@@ -44,6 +47,7 @@ public class ErrorCode {
     codeMessageMap.put(FAILED, "未知错误");
     codeMessageMap.put(Common.UNAUTHORIZED, "没有权限");
     codeMessageMap.put(Common.ILLEGAL_PARAM, "非法的参数");
+    codeMessageMap.put(Common.OPERATION_EXCEPTION, "操作失败");
 
     codeMessageMap.put(User.EMPTY_MOBILE_OR_PASSWORD, "手机或密码不能为空");
     codeMessageMap.put(User.USER_NOT_EXIST, "用户不存在");
@@ -56,6 +60,10 @@ public class ErrorCode {
     codeMessageMap.put(Diary.ILLEGAL_IMAGE_FORMAT, "无效的图片格式");
     codeMessageMap.put(Diary.FAILED_TO_SAVE_IMAGE, "无法保存图片");
     codeMessageMap.put(Diary.ILLEGAL_ID, "无效的ID");
+    codeMessageMap.put(Diary.DIARY_NOT_EXIST, "日记不存在");
+
+    codeMessageMap.put(Comment.EMPTY_CONTENT, "评论内容不能为空");
+    codeMessageMap.put(Comment.COMMENT_NOT_EXIST, "评论不存在");
   }
 
   public static String getErrorMessage(int errorCode) {
