@@ -24,7 +24,7 @@ public class Diary {
   private String title;
   private String content;
   private String coverUrl;
-  private Date createdTime;
+  private Date createTime;
   private Date lastModifiedTime;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -33,7 +33,6 @@ public class Diary {
 
   @OneToMany(cascade= {CascadeType.ALL}, fetch= FetchType.LAZY, mappedBy = "diary")
   private List<Comment> comments = new ArrayList<>();
-
 
   public long getId() {
     return id;
@@ -83,12 +82,12 @@ public class Diary {
     this.comments = comments;
   }
 
-  public Date getCreatedTime() {
-    return createdTime;
+  public Date getCreateTime() {
+    return createTime;
   }
 
-  public void setCreatedTime(Date createdTime) {
-    this.createdTime = createdTime;
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
   }
 
   public Date getLastModifiedTime() {

@@ -179,8 +179,7 @@ public class DiaryController extends BaseController {
   }
 
   @RequestMapping(value = "/diary/retrieve/list", method = RequestMethod.POST)
-  public BaseResponse retrieveDiaryList(@RequestParam("index") long index,
-      @RequestParam("size") int size) {
+  public BaseResponse retrieveDiaryList(@RequestParam("index") int index, @RequestParam("size") int size) {
     BaseResponse response = null;
 
     // check params's legality

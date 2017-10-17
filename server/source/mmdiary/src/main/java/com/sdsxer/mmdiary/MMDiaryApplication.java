@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 /**
+ * Application entrance
  * Created by leon on 2017/9/14.
  */
 @SpringBootApplication

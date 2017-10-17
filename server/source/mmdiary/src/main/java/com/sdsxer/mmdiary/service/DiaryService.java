@@ -26,7 +26,7 @@ public class DiaryService {
     diary.setContent(content);
     diary.setCoverUrl(coverUrl);
     Date now = new Date();
-    diary.setCreatedTime(now);
+    diary.setCreateTime(now);
     diary.setLastModifiedTime(now);
     return diaryDao.save(diary);
   }
@@ -46,8 +46,7 @@ public class DiaryService {
     diary.setTitle(title);
     diary.setContent(content);
     diary.setCoverUrl(coverUrl);
-    Date now = new Date();
-    diary.setLastModifiedTime(now);
+    diary.setLastModifiedTime(new Date());
     return diaryDao.saveAndFlush(diary);
   }
 

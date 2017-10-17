@@ -25,14 +25,14 @@ public class DataSourceConfig {
    * @return
    */
   @Profile(Constants.CONFIG_ENV_DEV)
-  @Bean
+  @Bean(destroyMethod = "shutdown")
   public DataSource dataSourceEmbedded() {
     return new EmbeddedDatabaseBuilder()
         .setType(EmbeddedDatabaseType.H2)
 //        .addScript("classpath:schema.sql")
-//        .addScript("classpath:import.sql")
 //        .addScript("classpath:data.sql")
-        .setScriptEncoding("utf-8")
+//        .addScript("classpath:import.sql")
+        .setScriptEncoding("UTF-8")
         .build();
   }
 
@@ -45,7 +45,7 @@ public class DataSourceConfig {
   }
 
   @Profile(Constants.CONFIG_ENV_QA)
-  @Bean
+  @Bean(destroyMethod = "close")
   public BasicDataSource dataSourcePool() {
     BasicDataSource basicDataSource = new BasicDataSource();
     basicDataSource.setDriverClassName("com.mysql.jdbc.Driver");

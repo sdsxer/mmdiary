@@ -3,6 +3,8 @@ package com.sdsxer.mmdiary.config;
 import com.sdsxer.mmdiary.common.Constants;
 import java.util.Properties;
 import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,21 +15,13 @@ import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 @Profile(Constants.CONFIG_ORM_JPA)
 public class JpaConfig {
 
+  private static final Logger logger = LoggerFactory.getLogger(JpaConfig.class);
+
   @Autowired
   private DataSource dataSource;
 
   @Autowired
   private Properties properties;
-
-  @Bean
-  public LocalSessionFactoryBean hibernateSqlSessionFactory() {
-    LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-    sessionFactory.setDataSource(dataSource);
-    sessionFactory.setPackagesToScan(new String[] {"com.sdsxer.mmdiary.repository"});
-    sessionFactory.setHibernateProperties(properties);
-    return sessionFactory;
-  }
-
 
   @Bean
   @Profile(Constants.CONFIG_ENV_DEV)
@@ -53,5 +47,14 @@ public class JpaConfig {
     Properties properties = new Properties();
     properties.setProperty("dialect", "org.hibernate.dialect.MySQLDialect");
     return properties;
+  }
+
+  @Bean
+  public LocalSessionFactoryBean hibernateSqlSessionFactory() {
+    LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+    sessionFactory.setDataSource(dataSource);
+    sessionFactory.setPackagesToScan(new String[] {"com.sdsxer.mmdiary.repository"});
+//    sessionFactory.setHibernateProperties(properties);
+    return sessionFactory;
   }
 }

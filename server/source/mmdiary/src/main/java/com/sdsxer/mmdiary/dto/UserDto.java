@@ -23,39 +23,19 @@ public class UserDto {
     return id;
   }
 
-  public void setId(long id) {
-    this.id = id;
-  }
-
   public String getName() {
     return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
   }
 
   public String getMobile() {
     return mobile;
   }
 
-  public void setMobile(String mobile) {
-    this.mobile = mobile;
-  }
-
   public String getAvatarUrl() {
     return avatarUrl;
   }
 
-  public void setAvatarUrl(String avatarUrl) {
-    this.avatarUrl = avatarUrl;
-  }
-
   public int getGender() {
     return gender;
-  }
-
-  public void setGender(int gender) {
-    this.gender = gender;
   }
 }
