@@ -1,6 +1,7 @@
 package com.sdsxer.mmdiary.service;
 
 import com.sdsxer.mmdiary.domain.Diary;
+import com.sdsxer.mmdiary.domain.User;
 import com.sdsxer.mmdiary.repository.DiaryDao;
 import java.util.Date;
 import org.slf4j.Logger;
@@ -19,11 +20,14 @@ public class DiaryService {
   @Autowired
   private DiaryDao diaryDao;
 
-  public Diary createDiary(String title, String content, String coverUrl) {
+  public Diary createDiary(long userId, String title, String content, String coverUrl) {
     Diary diary = new Diary();
     diary.setTitle(title);
     diary.setContent(content);
     diary.setCoverUrl(coverUrl);
+    User author = new User();
+    author.setId(userId);
+    diary.setUser(author);
     Date now = new Date();
     diary.setCreateTime(now);
     diary.setLastModifiedTime(now);

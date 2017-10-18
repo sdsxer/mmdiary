@@ -47,19 +47,19 @@ public class DiaryController extends BaseController {
   private TokenManager tokenManager;
 
   @RequestMapping(value = "/diary/create", method = RequestMethod.POST)
-  public BaseResponse createDiary(@RequestParam("title") String title,
-      @RequestParam("content") String content, @RequestParam("file") MultipartFile file) {
-
+  public BaseResponse createDiary(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
+      @RequestParam("title") String title, @RequestParam("content") String content,
+      @RequestParam("file") MultipartFile file) {
     BaseResponse response = null;
 
     // empty title
-    if(Strings.isNullOrEmpty(title)) {
+    if(StringUtils.isEmpty(title)) {
       response = new FailureResponse(ErrorCode.Diary.EMPTY_TITLE);
       return response;
     }
 
     // empty content
-    if(Strings.isNullOrEmpty(content)) {
+    if(StringUtils.isEmpty(content)) {
       response = new FailureResponse(ErrorCode.Diary.EMPTY_CONTENT);
       return response;
     }
@@ -70,7 +70,7 @@ public class DiaryController extends BaseController {
       return response;
     }
 
-    // unsupported cover image format
+    // unsupported image format
     if(!ImageUtils.isFormatSupported(FileUtils.getFileSuffix(file.getOriginalFilename()))) {
       response = new FailureResponse(ErrorCode.Diary.ILLEGAL_IMAGE_FORMAT);
       return response;
@@ -89,8 +89,8 @@ public class DiaryController extends BaseController {
       return response;
     }
 
-    // create response
-    Diary diary = diaryService.createDiary(title, content, filePath.toString());
+    // encapsulate response
+    Diary diary = diaryService.createDiary(tokenManager.getUserId(token), title, content, filePath.toString());
     response = new CreateDiaryResponse(diary);
     return response;
   }

@@ -11,4 +11,12 @@ public class CreateDiaryResponse extends SuccessResponse {
   public CreateDiaryResponse(Diary diary) {
     this.diary = new DiaryDto(diary);
   }
+
+  public DiaryDto getDiary() {
+    return diary;
+  }
+
+  public void setDiary(DiaryDto diary) {
+    this.diary = diary;
+  }
 }

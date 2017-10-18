@@ -4,19 +4,21 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * Storage service config
+ * Created by leon on 2017/9/26.
  */
 @ConfigurationProperties("storage")
 public class StorageProperties {
 
-    private String location = "upload-dir";
+    private String rootLocation = "/Users/leon/Desktop/tomcat/upload";
+    private String projectLocation = "/mmdiary/file";
     private int capacity = 1024 * 1024 * 1024;
 
-    public String getLocation() {
-        return location;
+    public String getRootLocation() {
+        return rootLocation;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setRootLocation(String rootLocation) {
+        this.rootLocation = rootLocation;
     }
 
     public int getCapacity() {
@@ -25,5 +27,13 @@ public class StorageProperties {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public String getProjectLocation() {
+        return projectLocation;
+    }
+
+    public void setProjectLocation(String projectLocation) {
+        this.projectLocation = projectLocation;
     }
 }

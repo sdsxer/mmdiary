@@ -2,6 +2,7 @@ package com.sdsxer.mmdiary.storage;
 
 import com.sdsxer.mmdiary.config.StorageProperties;
 import com.sdsxer.mmdiary.utils.FileUtils;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -26,20 +27,23 @@ public class FileSystemStorageService implements StorageService {
 
     private static final Logger logger = LoggerFactory.getLogger(FileSystemStorageService.class);
 
-    private final Path rootLocation;
-    private final int capacity;
+    private final Path location;
+
+    private StorageProperties properties;
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
-        this.rootLocation = Paths.get(properties.getLocation());
-        this.capacity = properties.getCapacity();
-        logger.info("Storage config: location=%s, capacity=%d", rootLocation.toAbsolutePath(), capacity);
+        location = Paths.get(properties.getRootLocation() + File.separator
+            + properties.getProjectLocation());
+        logger.info("Storage config: location={}, capacity={}", location.toAbsolutePath(),
+            properties.getCapacity());
+        this.properties = properties;
     }
 
     @Override
     public void init() {
         try {
-            Files.createDirectories(rootLocation);
+            Files.createDirectories(location);
         }
         catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);
@@ -53,8 +57,8 @@ public class FileSystemStorageService implements StorageService {
         }
         long available = available();
         if(available < file.getSize()) {
-            throw new OverCapacityLimitException("Space available: " + available +
-                ", target file size: " + file.getSize());
+            throw new OverCapacityLimitException("Space available: " + available
+                + ", target file size: " + file.getSize());
         }
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
@@ -71,21 +75,21 @@ public class FileSystemStorageService implements StorageService {
             String fileSuffix = FileUtils.getFileSuffix(filename);
             filename = UUID.randomUUID() + "." + fileSuffix;
             // save file
-            Files.copy(file.getInputStream(), rootLocation.resolve(filename),
+            Files.copy(file.getInputStream(), location.resolve(filename),
                 StandardCopyOption.REPLACE_EXISTING);
         }
         catch (IOException e) {
             throw new StorageException("Failed to store file " + filename, e);
         }
-        return rootLocation.resolve(filename);
+        return location.resolve(filename);
     }
 
     @Override
     public Stream<Path> loadAll() {
         try {
-            return Files.walk(this.rootLocation, 1)
-                    .filter(path -> !path.equals(this.rootLocation))
-                    .map(path -> this.rootLocation.relativize(path));
+            return Files.walk(this.location, 1)
+                    .filter(path -> !path.equals(this.location))
+                    .map(path -> this.location.relativize(path));
         }
         catch (IOException e) {
             throw new StorageException("Failed to read stored files", e);
@@ -97,7 +101,7 @@ public class FileSystemStorageService implements StorageService {
     public Path load(String filename) {
         Path path = null;
         try {
-            path = rootLocation.resolve(filename);
+            path = location.resolve(filename);
         }
         catch (InvalidPathException e) {
             throw new StorageException("Failed to read stored file", e);
@@ -115,7 +119,6 @@ public class FileSystemStorageService implements StorageService {
             }
             else {
                 throw new StorageFileNotFoundException("Could not read file: " + filename);
-
             }
         }
         catch (MalformedURLException e) {
@@ -125,11 +128,11 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public void deleteAll() {
-        FileSystemUtils.deleteRecursively(rootLocation.toFile());
+        FileSystemUtils.deleteRecursively(location.toFile());
     }
 
     @Override
     public long available() {
-        return capacity - FileUtils.getDirSize(rootLocation.toAbsolutePath().toString());
+        return properties.getCapacity() - FileUtils.getDirSize(location.toAbsolutePath().toString());
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 
 /**
  * JPA config
+ * Created by leon on 2017/9/15.
  */
 @Configuration
 @Profile(Constants.CONFIG_ORM_JPA)

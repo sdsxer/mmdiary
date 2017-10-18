@@ -36,6 +36,10 @@ public class DataSourceConfig {
         .build();
   }
 
+  /**
+   * this enables embedded h2 database access by console
+   * @return
+   */
   @Profile(Constants.CONFIG_ENV_DEV)
   @Bean
   public ServletRegistrationBean h2servletRegistration() {
@@ -44,6 +48,10 @@ public class DataSourceConfig {
     return registration;
   }
 
+  /**
+   * use connection pool under qa environment
+   * @return
+   */
   @Profile(Constants.CONFIG_ENV_QA)
   @Bean(destroyMethod = "close")
   public BasicDataSource dataSourcePool() {
@@ -57,6 +65,10 @@ public class DataSourceConfig {
     return basicDataSource;
   }
 
+  /**
+   * use jndi under prod environment
+   * @return
+   */
   @Profile(Constants.CONFIG_ENV_PROD)
   @Bean
   public DataSource dataSourceLookup() {
