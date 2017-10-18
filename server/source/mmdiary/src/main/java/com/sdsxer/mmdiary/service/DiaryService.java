@@ -3,7 +3,6 @@ package com.sdsxer.mmdiary.service;
 import com.sdsxer.mmdiary.domain.Diary;
 import com.sdsxer.mmdiary.repository.DiaryDao;
 import java.util.Date;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +34,8 @@ public class DiaryService {
     return diaryDao.findOne(id);
   }
 
-  public Page<Diary> retrieveDiaryList(long index, int size) {
-    Page<Diary> diaryPage = diaryDao.findAll(new PageRequest((int) index, size,
-        Sort.Direction.ASC,"id"));
-    return diaryPage;
+  public Page<Diary> retrieveDiaryList(int index, int size) {
+    return diaryDao.findAll(new PageRequest(index, size, Sort.Direction.ASC,"id"));
   }
 
   public Diary updateDiary(String title, String content, String coverUrl) {

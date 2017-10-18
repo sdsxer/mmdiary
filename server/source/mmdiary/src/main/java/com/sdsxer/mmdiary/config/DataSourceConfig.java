@@ -13,15 +13,18 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jndi.JndiObjectFactoryBean;
 
 /**
- * 数据源配置信息
+ * Data source config
  * Created by leon on 2017/9/15.
  */
 @Configuration
 public class DataSourceConfig {
 
   /**
-   * 如果hibernate.hbm2ddl.auto属性为none，数据库会执行schema.sql创建，并且加载data.sql导入数据
-   * 如果hibernate.hbm2ddl.auto属性为create或create-drop，嵌入式数据库会从Entity自动创建表，并且加载import.sql
+   * schema.sql and data.sql is spring's default script
+   * import.sql is hibernate's default script
+   *
+   * spring will set hibernate.hbm2ddl.auto to create or create-drop by default when using hibernate
+   * when it find an embedded data source was defined.
    * @return
    */
   @Profile(Constants.CONFIG_ENV_DEV)
@@ -29,9 +32,6 @@ public class DataSourceConfig {
   public DataSource dataSourceEmbedded() {
     return new EmbeddedDatabaseBuilder()
         .setType(EmbeddedDatabaseType.H2)
-//        .addScript("classpath:schema.sql")
-//        .addScript("classpath:data.sql")
-//        .addScript("classpath:import.sql")
         .setScriptEncoding("UTF-8")
         .build();
   }

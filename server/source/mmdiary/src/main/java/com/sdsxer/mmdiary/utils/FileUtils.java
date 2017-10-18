@@ -1,6 +1,8 @@
 package com.sdsxer.mmdiary.utils;
 
 import com.google.common.base.Strings;
+import java.io.File;
+import org.springframework.util.StringUtils;
 
 public class FileUtils {
 
@@ -13,5 +15,28 @@ public class FileUtils {
       }
     }
     return suffix;
+  }
+
+  public static long getDirSize(String path) {
+    if(StringUtils.isEmpty(path)) {
+      return 0;
+    }
+    File file = new File(path);
+    if (file.exists()) {
+      if (file.isDirectory()) {
+        File[] children = file.listFiles();
+        long size = 0;
+        if(children != null) {
+          for (File f : children) {
+            size += getDirSize(f.getAbsolutePath());
+          }
+        }
+        return size;
+      } else {
+        return file.length();
+      }
+    } else {
+      return 0;
+    }
   }
 }

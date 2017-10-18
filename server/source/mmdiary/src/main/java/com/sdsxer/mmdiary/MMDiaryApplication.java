@@ -2,7 +2,7 @@ package com.sdsxer.mmdiary;
 
 
 import com.sdsxer.mmdiary.common.Constants;
-import com.sdsxer.mmdiary.storage.StorageProperties;
+import com.sdsxer.mmdiary.config.StorageProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

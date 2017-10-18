@@ -2,7 +2,6 @@ package com.sdsxer.mmdiary.config;
 
 import com.google.common.base.Strings;
 import com.sdsxer.mmdiary.common.Constants;
-import com.sdsxer.mmdiary.utils.EnvironmentUtils;
 import com.sdsxer.mmdiary.utils.TokenManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

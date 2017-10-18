@@ -1,14 +1,15 @@
-package com.sdsxer.mmdiary.storage;
+package com.sdsxer.mmdiary.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * Storage service config
+ */
 @ConfigurationProperties("storage")
 public class StorageProperties {
 
-    /**
-     * Folder location for storing files
-     */
     private String location = "upload-dir";
+    private int capacity = 1024 * 1024 * 1024;
 
     public String getLocation() {
         return location;
@@ -18,4 +19,11 @@ public class StorageProperties {
         this.location = location;
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
 }

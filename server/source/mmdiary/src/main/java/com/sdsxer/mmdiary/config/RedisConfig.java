@@ -8,11 +8,11 @@ import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
- * 配置Redis
+ * Redis config
  * Created by leon on 2017/9/26.
  */
 @Configuration
-public class RedisConfig{
+public class RedisConfig {
 
   @Bean
   public JedisConnectionFactory jedisConnectionFactory() {

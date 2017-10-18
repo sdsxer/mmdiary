@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 
+/**
+ * JPA config
+ */
 @Configuration
 @Profile(Constants.CONFIG_ORM_JPA)
 public class JpaConfig {

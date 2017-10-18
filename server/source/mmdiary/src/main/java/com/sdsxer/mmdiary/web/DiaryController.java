@@ -7,6 +7,7 @@ import com.sdsxer.mmdiary.common.ErrorCode;
 import com.sdsxer.mmdiary.common.ErrorCode.Common;
 import com.sdsxer.mmdiary.domain.Diary;
 import com.sdsxer.mmdiary.service.DiaryService;
+import com.sdsxer.mmdiary.storage.StorageException;
 import com.sdsxer.mmdiary.storage.StorageService;
 import com.sdsxer.mmdiary.utils.FileUtils;
 import com.sdsxer.mmdiary.utils.ImageUtils;
@@ -75,21 +76,20 @@ public class DiaryController extends BaseController {
       return response;
     }
 
-    // save cover image
-    String filename = null;
+    // save image
+    Path filePath = null;
     try {
-      filename = storageService.store(file);
+      filePath = storageService.store(file);
     }
-    catch (Exception e) {
+    catch (StorageException e) {
       logger.error("could not save file", e);
     }
-    if(Strings.isNullOrEmpty(filename)) {
+    if(filePath == null) {
       response = new FailureResponse(ErrorCode.Diary.FAILED_TO_SAVE_IMAGE);
       return response;
     }
 
     // create response
-    Path filePath = storageService.load(filename);
     Diary diary = diaryService.createDiary(title, content, filePath.toString());
     response = new CreateDiaryResponse(diary);
     return response;
@@ -123,33 +123,40 @@ public class DiaryController extends BaseController {
     }
 
     // check params's legality
-    if(StringUtils.isEmpty(title) || StringUtils.isEmpty(content) || file == null) {
+    if(StringUtils.isEmpty(title) || StringUtils.isEmpty(content)) {
       response = new FailureResponse(Common.ILLEGAL_PARAM);
       return response;
+    } else {
+      originalDiary.setTitle(title);
+      originalDiary.setContent(content);
     }
 
-    // check image format
-    if(!ImageUtils.isFormatSupported(FileUtils.getFileSuffix(file.getOriginalFilename()))) {
-      response = new FailureResponse(ErrorCode.Diary.ILLEGAL_IMAGE_FORMAT);
-      return response;
-    }
+    // update image
+    if(file != null) {
+      // check image format
+      if(!ImageUtils.isFormatSupported(FileUtils.getFileSuffix(file.getOriginalFilename()))) {
+        response = new FailureResponse(ErrorCode.Diary.ILLEGAL_IMAGE_FORMAT);
+        return response;
+      }
 
-    // save image
-    String filename = null;
-    try {
-      filename = storageService.store(file);
-    }
-    catch (Exception e) {
-      logger.error("could not save file", e);
-    }
-    if(Strings.isNullOrEmpty(filename)) {
-      response = new FailureResponse(ErrorCode.Diary.FAILED_TO_SAVE_IMAGE);
-      return response;
+      // save image
+      Path filePath = null;
+      try {
+        filePath = storageService.store(file);
+      }
+      catch (Exception e) {
+        logger.error("could not save file", e);
+      }
+      if(filePath == null) {
+        response = new FailureResponse(ErrorCode.Diary.FAILED_TO_SAVE_IMAGE);
+        return response;
+      }
+      originalDiary.setCoverUrl(filePath.toString());
     }
 
     // encapsulate response
-    Path filePath = storageService.load(filename);
-    Diary diary = diaryService.updateDiary(title, content, filePath.toString());
+    Diary diary = diaryService.updateDiary(originalDiary.getTitle(), originalDiary.getContent(),
+        originalDiary.getCoverUrl());
     response = new UpdateDiaryResponse(diary);
     return response;
   }
