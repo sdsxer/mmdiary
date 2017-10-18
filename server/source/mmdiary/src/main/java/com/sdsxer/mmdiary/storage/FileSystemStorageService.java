@@ -85,6 +85,21 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
+    public Path getRelativePath(Path absolutePath) throws StorageException {
+        Path relativePath = null;
+        if(absolutePath != null) {
+            try {
+                relativePath = Paths.get(properties.getProjectLocation(),
+                    absolutePath.getFileName().toString());
+            }
+            catch (Exception e) {
+                throw new StorageException("Can not covert path", e);
+            }
+        }
+        return relativePath;
+    }
+
+    @Override
     public Stream<Path> loadAll() {
         try {
             return Files.walk(this.location, 1)

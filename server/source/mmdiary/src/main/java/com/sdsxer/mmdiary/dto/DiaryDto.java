@@ -14,7 +14,7 @@ public class DiaryDto {
   public DiaryDto(Diary diary) {
     this.id = diary.getId();
     this.title = diary.getTitle();
-    this.content = diary.getTitle();
+    this.content = diary.getContent();
     this.coverUrl = diary.getCoverUrl();
     this.author = new UserDto(diary.getUser());
   }

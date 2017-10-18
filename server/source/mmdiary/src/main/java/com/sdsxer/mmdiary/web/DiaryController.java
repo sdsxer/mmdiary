@@ -1,10 +1,10 @@
 package com.sdsxer.mmdiary.web;
 
 
-import com.google.common.base.Strings;
 import com.sdsxer.mmdiary.common.Constants;
 import com.sdsxer.mmdiary.common.ErrorCode;
 import com.sdsxer.mmdiary.common.ErrorCode.Common;
+import com.sdsxer.mmdiary.config.StorageProperties;
 import com.sdsxer.mmdiary.domain.Diary;
 import com.sdsxer.mmdiary.service.DiaryService;
 import com.sdsxer.mmdiary.storage.StorageException;
@@ -77,20 +77,23 @@ public class DiaryController extends BaseController {
     }
 
     // save image
-    Path filePath = null;
+    Path absolutePath = null;
     try {
-      filePath = storageService.store(file);
+      absolutePath = storageService.store(file);
     }
     catch (StorageException e) {
-      logger.error("could not save file", e);
+      logger.error("Could not save file", e);
     }
-    if(filePath == null) {
+    if(absolutePath == null) {
       response = new FailureResponse(ErrorCode.Diary.FAILED_TO_SAVE_IMAGE);
       return response;
     }
 
+    // covert to relative path and store to database
+    Path relativePath = storageService.getRelativePath(absolutePath);
+
     // encapsulate response
-    Diary diary = diaryService.createDiary(tokenManager.getUserId(token), title, content, filePath.toString());
+    Diary diary = diaryService.createDiary(tokenManager.getUserId(token), title, content, relativePath.toString());
     response = new CreateDiaryResponse(diary);
     return response;
   }

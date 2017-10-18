@@ -11,6 +11,8 @@ public interface StorageService {
 
     Path store(MultipartFile file) throws StorageException;
 
+    Path getRelativePath(Path absolutePath) throws StorageException;
+
     Stream<Path> loadAll() throws StorageException;
 
     Path load(String filename) throws StorageException;
