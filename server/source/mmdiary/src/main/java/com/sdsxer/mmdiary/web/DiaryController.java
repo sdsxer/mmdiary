@@ -1,6 +1,7 @@
 package com.sdsxer.mmdiary.web;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sdsxer.mmdiary.common.Constants;
 import com.sdsxer.mmdiary.common.ErrorCode;
 import com.sdsxer.mmdiary.domain.Diary;
@@ -97,6 +98,9 @@ public class DiaryController extends BaseController {
       return response;
     }
 
+    // no need full user info
+    diary.setUser(null);
+
     // encapsulate response
     response = new CreateDiaryResponse(diary);
     return response;
@@ -180,7 +184,7 @@ public class DiaryController extends BaseController {
   public BaseResponse retrieveDiary(@RequestParam("id") long id) {
     BaseResponse response = null;
 
-    // check id's legality
+    // check param's legality
     if(id <= 0) {
       response = new FailureResponse(ErrorCode.Diary.ILLEGAL_ID);
       return response;

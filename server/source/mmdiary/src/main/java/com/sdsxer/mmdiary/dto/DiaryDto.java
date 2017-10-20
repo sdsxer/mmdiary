@@ -1,7 +1,6 @@
 package com.sdsxer.mmdiary.dto;
 
 import com.sdsxer.mmdiary.domain.Diary;
-import com.sdsxer.mmdiary.domain.User;
 
 public class DiaryDto {
 
@@ -16,7 +15,9 @@ public class DiaryDto {
     this.title = diary.getTitle();
     this.content = diary.getContent();
     this.coverUrl = diary.getCoverUrl();
-    this.author = new UserDto(diary.getUser());
+    if(diary.getUser() != null) {
+      this.author = new UserDto(diary.getUser());
+    }
   }
 
   public long getId() {
