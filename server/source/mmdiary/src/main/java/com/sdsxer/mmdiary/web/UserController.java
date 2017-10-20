@@ -1,8 +1,10 @@
 package com.sdsxer.mmdiary.web;
 
+import com.sdsxer.mmdiary.common.Constants;
 import com.sdsxer.mmdiary.common.ErrorCode;
 import com.sdsxer.mmdiary.domain.User;
 import com.sdsxer.mmdiary.service.UserService;
+import com.sdsxer.mmdiary.utils.AccountValidatorUtils;
 import com.sdsxer.mmdiary.utils.TokenManager;
 import com.sdsxer.mmdiary.web.response.BaseResponse;
 import com.sdsxer.mmdiary.web.response.FailureResponse;
@@ -32,7 +34,6 @@ public class UserController extends BaseController {
   @RequestMapping(value = "/user/login", method = RequestMethod.POST)
   public BaseResponse login(@RequestParam(value = "mobile") String mobile,
       @RequestParam(value = "password") String password) {
-
     BaseResponse loginResponse;
 
     // check mobile and password's format
@@ -41,36 +42,46 @@ public class UserController extends BaseController {
       return loginResponse;
     }
 
+    // check mobile's format
+    if(!AccountValidatorUtils.isMobile(mobile)) {
+      loginResponse = new FailureResponse(ErrorCode.User.ILLEGAL_MOBILE);
+      return loginResponse;
+    }
+
+    // check password's format
+    if(AccountValidatorUtils.isPassword(password)) {
+      loginResponse = new FailureResponse(ErrorCode.User.ILLEGAl_PASSWORD);
+      return loginResponse;
+    }
+
+    // retrieve user
     User user = userService.login(mobile);
 
-    // check user's existences
+    // check user's existence
     if(user == null) {
       loginResponse = new FailureResponse(ErrorCode.User.USER_NOT_EXIST);
       return loginResponse;
     }
 
     // check password's correction
-    if(!user.getPassword().equals(password)) {
+    if(!StringUtils.equals(user.getPassword(), password)) {
       loginResponse = new FailureResponse(ErrorCode.User.PASSWORD_NOT_CORRECT);
       return loginResponse;
     }
 
     // save token, if user already have a token, then it will be replaced by new one
     String token = tokenManager.createToken(user.getId());
+
+    // encapsulate response
     loginResponse = new LoginResponse(token, user);
     return loginResponse;
   }
 
   @RequestMapping(value = "/user/logout", method = RequestMethod.POST)
-  public BaseResponse logout(@RequestHeader("Token") String token) {
-
-//    BaseResponse logoutResponse;
-//    if(!tokenManager.checkToken(token)) {
-//      logoutResponse = new FailureResponse(ErrorCode.User.INVALID_USER);
-//    } else {
-//      tokenManager.deleteToken(token);
-//      logoutResponse = new SuccessResponse();
-//    }
-    return new SuccessResponse();
+  public BaseResponse logout(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token) {
+    BaseResponse logoutResponse = new SuccessResponse();
+    // delete token from pool
+    tokenManager.deleteToken(token);
+    return logoutResponse;
   }
 }

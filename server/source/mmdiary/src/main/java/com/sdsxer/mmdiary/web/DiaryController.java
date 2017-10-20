@@ -3,8 +3,6 @@ package com.sdsxer.mmdiary.web;
 
 import com.sdsxer.mmdiary.common.Constants;
 import com.sdsxer.mmdiary.common.ErrorCode;
-import com.sdsxer.mmdiary.common.ErrorCode.Common;
-import com.sdsxer.mmdiary.config.StorageProperties;
 import com.sdsxer.mmdiary.domain.Diary;
 import com.sdsxer.mmdiary.service.DiaryService;
 import com.sdsxer.mmdiary.storage.StorageException;
@@ -52,25 +50,25 @@ public class DiaryController extends BaseController {
       @RequestParam("file") MultipartFile file) {
     BaseResponse response = null;
 
-    // empty title
+    // check if title empty
     if(StringUtils.isEmpty(title)) {
       response = new FailureResponse(ErrorCode.Diary.EMPTY_TITLE);
       return response;
     }
 
-    // empty content
+    // check if content empty
     if(StringUtils.isEmpty(content)) {
       response = new FailureResponse(ErrorCode.Diary.EMPTY_CONTENT);
       return response;
     }
 
-    // empty cover image
+    // check if image empty
     if(file == null) {
       response = new FailureResponse(ErrorCode.Diary.EMPTY_COVER_IMAGE);
       return response;
     }
 
-    // unsupported image format
+    // check image format
     if(!ImageUtils.isFormatSupported(FileUtils.getFileSuffix(file.getOriginalFilename()))) {
       response = new FailureResponse(ErrorCode.Diary.ILLEGAL_IMAGE_FORMAT);
       return response;
@@ -89,11 +87,17 @@ public class DiaryController extends BaseController {
       return response;
     }
 
-    // covert to relative path and store to database
+    // resolve relative path and store to database
     Path relativePath = storageService.getRelativePath(absolutePath);
 
-    // encapsulate response
+    // insert diary into database
     Diary diary = diaryService.createDiary(tokenManager.getUserId(token), title, content, relativePath.toString());
+    if(diary == null) {
+      response = new FailureResponse(ErrorCode.Diary.UNABLE_CREATE_DIARY);
+      return response;
+    }
+
+    // encapsulate response
     response = new CreateDiaryResponse(diary);
     return response;
   }
@@ -112,14 +116,14 @@ public class DiaryController extends BaseController {
       return response;
     }
 
-    // check authority
+    // check modify authority
     long userId = tokenManager.getUserId(token);
     if(originalDiary.getUser() == null || originalDiary.getUser().getId() != userId) {
-      response = new FailureResponse(Common.UNAUTHORIZED);
+      response = new FailureResponse(ErrorCode.Common.UNAUTHORIZED);
       return response;
     }
 
-    // check id's legality
+    // check diary id's legality
     if(id <= 0) {
       response = new FailureResponse(ErrorCode.Diary.ILLEGAL_ID);
       return response;
@@ -127,12 +131,13 @@ public class DiaryController extends BaseController {
 
     // check params's legality
     if(StringUtils.isEmpty(title) || StringUtils.isEmpty(content)) {
-      response = new FailureResponse(Common.ILLEGAL_PARAM);
+      response = new FailureResponse(ErrorCode.Common.ILLEGAL_PARAM);
       return response;
-    } else {
-      originalDiary.setTitle(title);
-      originalDiary.setContent(content);
     }
+
+    // save title and content
+    originalDiary.setTitle(title);
+    originalDiary.setContent(content);
 
     // update image
     if(file != null) {
@@ -143,23 +148,30 @@ public class DiaryController extends BaseController {
       }
 
       // save image
-      Path filePath = null;
+      Path absolutePath = null;
       try {
-        filePath = storageService.store(file);
+        absolutePath = storageService.store(file);
       }
       catch (Exception e) {
         logger.error("could not save file", e);
       }
-      if(filePath == null) {
+      if(absolutePath == null) {
         response = new FailureResponse(ErrorCode.Diary.FAILED_TO_SAVE_IMAGE);
         return response;
       }
-      originalDiary.setCoverUrl(filePath.toString());
+      Path relativePath = storageService.getRelativePath(absolutePath);
+      originalDiary.setCoverUrl(relativePath.toString());
+    }
+
+    // update diary
+    Diary diary = diaryService.updateDiary(originalDiary.getTitle(), originalDiary.getContent(),
+        originalDiary.getCoverUrl());
+    if(diary == null) {
+      response = new FailureResponse(ErrorCode.Diary.UNABLE_UPDATE_DIARY);
+      return response;
     }
 
     // encapsulate response
-    Diary diary = diaryService.updateDiary(originalDiary.getTitle(), originalDiary.getContent(),
-        originalDiary.getCoverUrl());
     response = new UpdateDiaryResponse(diary);
     return response;
   }
@@ -194,12 +206,16 @@ public class DiaryController extends BaseController {
 
     // check params's legality
     if(index < 0 || size <= 0) {
-      response = new FailureResponse(Common.ILLEGAL_PARAM);
+      response = new FailureResponse(ErrorCode.Common.ILLEGAL_PARAM);
       return response;
     }
 
     // retrieve diary list
     Page<Diary> diaryPage = diaryService.retrieveDiaryList(index, size);
+    if(diaryPage == null) {
+      response = new FailureResponse(ErrorCode.Diary.UNABLE_RETRIEVE_DIARY_LIST);
+      return response;
+    }
 
     // encapsulate response
     response = new RetrieveDiaryListResponse(diaryPage);
@@ -217,15 +233,16 @@ public class DiaryController extends BaseController {
       return response;
     }
 
+    // retrieve diary
     Diary diary = diaryService.retrieveDiary(id);
 
-    // check whether diary exist
+    // check diary's existence
     if(diary == null) {
       response = new FailureResponse(ErrorCode.Diary.DIARY_NOT_EXIST);
       return response;
     }
 
-    // only author and admin have authorize to delete diary
+    // check user's authority
     long userId = tokenManager.getUserId(token);
     if(diary.getUser() == null || diary.getUser().getId() != userId) {
       response = new FailureResponse(ErrorCode.Common.UNAUTHORIZED);

@@ -23,6 +23,8 @@ public class ErrorCode {
     public static final int USER_NOT_EXIST = BASE + 2;
     public static final int PASSWORD_NOT_CORRECT = BASE + 3;
     public static final int INVALID_USER = BASE + 4;
+    public static final int ILLEGAL_MOBILE = BASE + 5;
+    public static final int ILLEGAl_PASSWORD = BASE + 6;
   }
 
   public class Diary {
@@ -34,6 +36,9 @@ public class ErrorCode {
     public static final int FAILED_TO_SAVE_IMAGE = BASE + 5;
     public static final int ILLEGAL_ID = BASE + 6;
     public static final int DIARY_NOT_EXIST = BASE + 7;
+    public static final int UNABLE_CREATE_DIARY = BASE + 8;
+    public static final int UNABLE_UPDATE_DIARY = BASE + 9;
+    public static final int UNABLE_RETRIEVE_DIARY_LIST = BASE + 10;
   }
 
   public class Comment {
@@ -53,6 +58,8 @@ public class ErrorCode {
     codeMessageMap.put(User.USER_NOT_EXIST, "用户不存在");
     codeMessageMap.put(User.PASSWORD_NOT_CORRECT, "密码不正确");
     codeMessageMap.put(User.INVALID_USER, "无效的用户");
+    codeMessageMap.put(User.ILLEGAL_MOBILE, "手机号格式错误");
+    codeMessageMap.put(User.ILLEGAl_PASSWORD, "密码格式错误");
 
     codeMessageMap.put(Diary.EMPTY_TITLE, "标题不能为空");
     codeMessageMap.put(Diary.EMPTY_CONTENT, "内容不能为空");
@@ -61,6 +68,9 @@ public class ErrorCode {
     codeMessageMap.put(Diary.FAILED_TO_SAVE_IMAGE, "无法保存图片");
     codeMessageMap.put(Diary.ILLEGAL_ID, "无效的ID");
     codeMessageMap.put(Diary.DIARY_NOT_EXIST, "日记不存在");
+    codeMessageMap.put(Diary.UNABLE_CREATE_DIARY, "无法创建日记");
+    codeMessageMap.put(Diary.UNABLE_UPDATE_DIARY, "无法保存日记");
+    codeMessageMap.put(Diary.UNABLE_RETRIEVE_DIARY_LIST, "无法获取日记列表");
 
     codeMessageMap.put(Comment.EMPTY_CONTENT, "评论内容不能为空");
     codeMessageMap.put(Comment.COMMENT_NOT_EXIST, "评论不存在");

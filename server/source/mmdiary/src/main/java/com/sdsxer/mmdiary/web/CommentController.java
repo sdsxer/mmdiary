@@ -3,7 +3,6 @@ package com.sdsxer.mmdiary.web;
 
 import com.sdsxer.mmdiary.common.Constants;
 import com.sdsxer.mmdiary.common.ErrorCode;
-import com.sdsxer.mmdiary.common.ErrorCode.Common;
 import com.sdsxer.mmdiary.domain.Comment;
 import com.sdsxer.mmdiary.service.CommentService;
 import com.sdsxer.mmdiary.utils.TokenManager;
@@ -50,7 +49,7 @@ public class CommentController extends BaseController {
 
     // operation exception
     if(comment == null) {
-      response = new FailureResponse(Common.OPERATION_EXCEPTION);
+      response = new FailureResponse(ErrorCode.Common.OPERATION_EXCEPTION);
       return response;
     }
 
@@ -65,6 +64,16 @@ public class CommentController extends BaseController {
   @RequestParam("id") long id, @RequestParam("content") String content) {
     BaseResponse response = null;
 
+    // check params's legality
+    if(id <= 0) {
+      response = new FailureResponse(ErrorCode.Common.ILLEGAL_PARAM);
+      return response;
+    }
+    if(StringUtils.isEmpty(content)) {
+      response = new FailureResponse(ErrorCode.Common.ILLEGAL_PARAM);
+      return response;
+    }
+
     // retrieve original comment
     Comment originalComment = commentService.retrieveComment(id);
     if(originalComment == null) {
@@ -75,19 +84,7 @@ public class CommentController extends BaseController {
     // check authority
     long userId = tokenManager.getUserId(token);
     if(originalComment.getUser() == null || originalComment.getUser().getId() != userId) {
-      response = new FailureResponse(Common.UNAUTHORIZED);
-      return response;
-    }
-
-    // check id's legality
-    if(id <= 0) {
-      response = new FailureResponse(Common.ILLEGAL_PARAM);
-      return response;
-    }
-
-    // check params's legality
-    if(StringUtils.isEmpty(content)) {
-      response = new FailureResponse(Common.ILLEGAL_PARAM);
+      response = new FailureResponse(ErrorCode.Common.UNAUTHORIZED);
       return response;
     }
 
@@ -96,7 +93,7 @@ public class CommentController extends BaseController {
 
     // operation exception
     if(comment == null) {
-      response = new FailureResponse(Common.OPERATION_EXCEPTION);
+      response = new FailureResponse(ErrorCode.Common.OPERATION_EXCEPTION);
       return response;
     }
 
@@ -113,12 +110,15 @@ public class CommentController extends BaseController {
 
     // check params's legality
     if(index < 0 || size <= 0) {
-      response = new FailureResponse(Common.ILLEGAL_PARAM);
+      response = new FailureResponse(ErrorCode.Common.ILLEGAL_PARAM);
       return response;
     }
 
     // retrieve comment list
     Page<Comment> commentPage = commentService.retrieveCommentList(index, size);
+    if(commentPage == null) {
+      response = new FailureResponse(ErrorCode.Common.OPERATION_EXCEPTION);
+    }
 
     // encapsulate response
     response = new RetrieveCommentListResponse(commentPage);
@@ -130,9 +130,9 @@ public class CommentController extends BaseController {
       @RequestParam("id") long id) {
     BaseResponse response = null;
 
-    // check id's legality
+    // check params's legality
     if(id <= 0) {
-      response = new FailureResponse(Common.ILLEGAL_PARAM);
+      response = new FailureResponse(ErrorCode.Common.ILLEGAL_PARAM);
       return response;
     }
 
