@@ -24,34 +24,34 @@ public class JpaConfig {
   @Autowired
   private DataSource dataSource;
 
-  @Autowired
-  private Properties properties;
-
-  @Bean
-  @Profile(Constants.CONFIG_ENV_DEV)
-  public Properties devProperties() {
-    Properties properties = new Properties();
-    properties.setProperty("hibernate.show_sql", "true");
-    properties.setProperty("hibernate.hbm2ddl.auto", "validate");
-    properties.setProperty("dialect", "org.hibernate.dialect.H2Dialect");
-    return properties;
-  }
-
-  @Bean
-  @Profile(Constants.CONFIG_ENV_QA)
-  public Properties qaProperties() {
-    Properties properties = new Properties();
-    properties.setProperty("dialect", "org.hibernate.dialect.MySQLDialect");
-    return properties;
-  }
-
-  @Bean
-  @Profile(Constants.CONFIG_ENV_PROD)
-  public Properties prodProperties() {
-    Properties properties = new Properties();
-    properties.setProperty("dialect", "org.hibernate.dialect.MySQLDialect");
-    return properties;
-  }
+//  @Autowired
+//  private Properties properties;
+//
+//  @Bean
+//  @Profile(Constants.CONFIG_ENV_DEV)
+//  public Properties devProperties() {
+//    Properties properties = new Properties();
+//    properties.setProperty("hibernate.show_sql", "true");
+//    properties.setProperty("hibernate.hbm2ddl.auto", "validate");
+//    properties.setProperty("dialect", "org.hibernate.dialect.H2Dialect");
+//    return properties;
+//  }
+//
+//  @Bean
+//  @Profile(Constants.CONFIG_ENV_QA)
+//  public Properties qaProperties() {
+//    Properties properties = new Properties();
+//    properties.setProperty("dialect", "org.hibernate.dialect.MySQLDialect");
+//    return properties;
+//  }
+//
+//  @Bean
+//  @Profile(Constants.CONFIG_ENV_PROD)
+//  public Properties prodProperties() {
+//    Properties properties = new Properties();
+//    properties.setProperty("dialect", "org.hibernate.dialect.MySQLDialect");
+//    return properties;
+//  }
 
   @Bean
   public LocalSessionFactoryBean hibernateSqlSessionFactory() {

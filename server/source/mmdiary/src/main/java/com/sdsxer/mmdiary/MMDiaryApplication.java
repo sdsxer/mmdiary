@@ -3,6 +3,11 @@ package com.sdsxer.mmdiary;
 
 import com.sdsxer.mmdiary.common.Constants;
 import com.sdsxer.mmdiary.config.StorageProperties;
+import com.sdsxer.mmdiary.domain.HostInfo;
+import com.sdsxer.mmdiary.web.DiaryController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -18,7 +23,12 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
 public class MMDiaryApplication extends SpringBootServletInitializer implements
-    EmbeddedServletContainerCustomizer{
+    EmbeddedServletContainerCustomizer {
+
+  private static Logger logger = LoggerFactory.getLogger(MMDiaryApplication.class);
+
+  @Autowired
+  private HostInfo hostInfo;
 
   // war entry
   @Override
@@ -34,6 +44,7 @@ public class MMDiaryApplication extends SpringBootServletInitializer implements
 
   @Override
   public void customize(ConfigurableEmbeddedServletContainer container) {
-    container.setPort();
+    logger.info("Server listening port: {}", hostInfo.getListeningPort());
+    container.setPort(hostInfo.getListeningPort());
   }
 }

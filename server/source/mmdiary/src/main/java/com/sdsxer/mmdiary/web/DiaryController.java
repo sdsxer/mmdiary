@@ -98,7 +98,7 @@ public class DiaryController extends BaseController {
       return response;
     }
 
-    // no need full user info
+    // no need full user info, author is user himself
     diary.setUser(null);
 
     // encapsulate response
