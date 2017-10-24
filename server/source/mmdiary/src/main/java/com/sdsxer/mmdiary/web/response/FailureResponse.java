@@ -5,7 +5,7 @@ import com.sdsxer.mmdiary.common.ErrorCode;
 public class FailureResponse extends BaseResponse {
 
   public FailureResponse() {
-    this.errorCode = ErrorCode.FAILED;
+    this.errorCode = ErrorCode.Common.UNKNOWN;
     this.errorMessage = ErrorCode.getErrorMessage(this.errorCode);
   }
 

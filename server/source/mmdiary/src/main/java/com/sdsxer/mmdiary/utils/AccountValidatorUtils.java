@@ -28,6 +28,13 @@ public class AccountValidatorUtils {
 
   public static final String REGEX_IP_ADDR = "(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)";
 
+
+  public static final String REGEX_MD5_32 = "^[a-zA-Z0-9]{32}$";
+
+
+  public static final String REGEX_MD5_16 = "^[a-zA-Z0-9]{16}$";
+
+
   /**
    * validate username
    *
@@ -106,5 +113,23 @@ public class AccountValidatorUtils {
    */
   public static boolean isIPAddr(String ipAddr) {
     return Pattern.matches(REGEX_IP_ADDR, ipAddr);
+  }
+
+  /**
+   * 校验MD5(32)格式
+   * @param md5_32
+   * @return
+   */
+  public static boolean isMD5_32(String md5_32) {
+    return Pattern.matches(REGEX_MD5_32, md5_32);
+  }
+
+  /**
+   * 校验MD5(16)格式
+   * @param md5_16
+   * @return
+   */
+  public static boolean isMD5_16 (String md5_16) {
+    return Pattern.matches(REGEX_MD5_16, md5_16);
   }
 }

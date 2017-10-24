@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class UserController extends BaseController {
@@ -83,5 +84,72 @@ public class UserController extends BaseController {
     // delete token from pool
     tokenManager.deleteToken(token);
     return logoutResponse;
+  }
+
+  @RequestMapping(value = "/user/profile/edit", method = RequestMethod.POST)
+  public BaseResponse editProfile(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
+      @RequestParam("avatar") MultipartFile avatar) {
+    BaseResponse editResponse = null;
+
+    // delete token from pool
+    tokenManager.deleteToken(token);
+    return editResponse;
+  }
+
+  @RequestMapping(value = "/user/password/modify", method = RequestMethod.POST)
+  public BaseResponse modifyPassword(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
+      @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword) {
+    BaseResponse response = null;
+
+    // check token's validation
+    if(!tokenManager.checkToken(token)) {
+      response = new FailureResponse(ErrorCode.User.INVALID_USER);
+      return response;
+    }
+
+    // check old password's format
+    if(StringUtils.isEmpty(oldPassword)) {
+      response = new FailureResponse(ErrorCode.User.EMPTY_OLD_PASSWORD);
+      return response;
+    }
+    if(!AccountValidatorUtils.isMD5_32(oldPassword)) {
+      response = new FailureResponse(ErrorCode.User.ILLEGAL_OLD_PASSWORD);
+      return response;
+    }
+
+    // check new password's format
+    if(StringUtils.isEmpty(newPassword)) {
+      response = new FailureResponse(ErrorCode.User.EMPTY_NEW_PASSWORD);
+      return response;
+    }
+    if(!AccountValidatorUtils.isMD5_32(newPassword)) {
+      response = new FailureResponse(ErrorCode.User.ILLEGAL_NEW_PASSWORD);
+      return response;
+    }
+
+    // check old password's correction
+    User user = userService.findUser(tokenManager.getUserId(token));
+    if(user == null) {
+      response = new FailureResponse(ErrorCode.Common.UNKNOWN);
+      return response;
+    }
+    if(!StringUtils.equalsIgnoreCase(user.getPassword(), oldPassword)) {
+      response = new FailureResponse(ErrorCode.User.INCORRECT_OLD_PASSWORD);
+      return response;
+    }
+
+    // update password
+    user.setPassword(newPassword);
+
+    // save to database
+    user = userService.updateUser(user);
+    if(user == null) {
+      response = new FailureResponse(ErrorCode.Common.OPERATION_EXCEPTION);
+      return response;
+    }
+
+    // encapsulate response
+    response = new SuccessResponse();
+    return response;
   }
 }

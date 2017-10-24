@@ -7,14 +7,16 @@ public class ErrorCode {
 
   private static final Map<Integer, String> codeMessageMap = new HashMap<Integer, String>();
 
-  public static final int SUCCESS = 0;
-  public static final int FAILED = -1;
+//  public static final int SUCCESS = 0;
+//  public static final int FAILED = -1;
 
   public class Common {
     private static final int BASE = 0;
+    public static final int SUCCEED = BASE;
     public static final int UNAUTHORIZED = BASE + 1;
     public static final int ILLEGAL_PARAM = BASE + 2;
     public static final int OPERATION_EXCEPTION = BASE + 3;
+    public static final int UNKNOWN = -1;
   }
 
   public class User {
@@ -25,6 +27,11 @@ public class ErrorCode {
     public static final int INVALID_USER = BASE + 4;
     public static final int ILLEGAL_MOBILE = BASE + 5;
     public static final int ILLEGAl_PASSWORD = BASE + 6;
+    public static final int EMPTY_OLD_PASSWORD = BASE + 7;
+    public static final int EMPTY_NEW_PASSWORD = BASE + 8;
+    public static final int ILLEGAL_OLD_PASSWORD = BASE + 9;
+    public static final int ILLEGAL_NEW_PASSWORD = BASE + 10;
+    public static final int INCORRECT_OLD_PASSWORD = BASE + 11;
   }
 
   public class Diary {
@@ -48,8 +55,8 @@ public class ErrorCode {
   }
 
   static {
-    codeMessageMap.put(SUCCESS, "请求成功");
-    codeMessageMap.put(FAILED, "未知错误");
+    codeMessageMap.put(Common.SUCCEED, "请求成功");
+    codeMessageMap.put(Common.UNKNOWN, "未知错误");
     codeMessageMap.put(Common.UNAUTHORIZED, "没有权限");
     codeMessageMap.put(Common.ILLEGAL_PARAM, "非法的参数");
     codeMessageMap.put(Common.OPERATION_EXCEPTION, "操作失败");
@@ -57,9 +64,14 @@ public class ErrorCode {
     codeMessageMap.put(User.EMPTY_MOBILE_OR_PASSWORD, "手机或密码不能为空");
     codeMessageMap.put(User.USER_NOT_EXIST, "用户不存在");
     codeMessageMap.put(User.PASSWORD_NOT_CORRECT, "密码不正确");
-    codeMessageMap.put(User.INVALID_USER, "无效的用户");
+    codeMessageMap.put(User.INVALID_USER, "无效的用户，请重新登录");
     codeMessageMap.put(User.ILLEGAL_MOBILE, "手机号格式错误");
     codeMessageMap.put(User.ILLEGAl_PASSWORD, "密码格式错误");
+    codeMessageMap.put(User.EMPTY_OLD_PASSWORD, "原始密码不能为空");
+    codeMessageMap.put(User.ILLEGAL_OLD_PASSWORD, "原始密码格式错误");
+    codeMessageMap.put(User.EMPTY_NEW_PASSWORD, "新密码不能为空");
+    codeMessageMap.put(User.ILLEGAL_NEW_PASSWORD, "新密码格式错误");
+    codeMessageMap.put(User.INCORRECT_OLD_PASSWORD, "原始密码错误");
 
     codeMessageMap.put(Diary.EMPTY_TITLE, "标题不能为空");
     codeMessageMap.put(Diary.EMPTY_CONTENT, "内容不能为空");
