@@ -4,12 +4,18 @@ import com.sdsxer.mmdiary.common.Constants;
 import com.sdsxer.mmdiary.common.ErrorCode;
 import com.sdsxer.mmdiary.domain.User;
 import com.sdsxer.mmdiary.service.UserService;
+import com.sdsxer.mmdiary.storage.StorageException;
+import com.sdsxer.mmdiary.storage.StorageService;
 import com.sdsxer.mmdiary.utils.AccountValidatorUtils;
+import com.sdsxer.mmdiary.utils.FileUtils;
+import com.sdsxer.mmdiary.utils.ImageUtils;
 import com.sdsxer.mmdiary.utils.TokenManager;
 import com.sdsxer.mmdiary.web.response.BaseResponse;
 import com.sdsxer.mmdiary.web.response.FailureResponse;
 import com.sdsxer.mmdiary.web.response.SuccessResponse;
+import com.sdsxer.mmdiary.web.response.user.EditProfileResponse;
 import com.sdsxer.mmdiary.web.response.user.LoginResponse;
+import java.nio.file.Path;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +38,15 @@ public class UserController extends BaseController {
   @Autowired
   private TokenManager tokenManager;
 
+  @Autowired
+  private StorageService storageService;
+
+  /**
+   * user login
+   * @param mobile
+   * @param password
+   * @return
+   */
   @RequestMapping(value = "/user/login", method = RequestMethod.POST)
   public BaseResponse login(@RequestParam(value = "mobile") String mobile,
       @RequestParam(value = "password") String password) {
@@ -78,6 +93,11 @@ public class UserController extends BaseController {
     return loginResponse;
   }
 
+  /**
+   * user logout
+   * @param token
+   * @return
+   */
   @RequestMapping(value = "/user/logout", method = RequestMethod.POST)
   public BaseResponse logout(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token) {
     BaseResponse logoutResponse = new SuccessResponse();
@@ -86,16 +106,86 @@ public class UserController extends BaseController {
     return logoutResponse;
   }
 
+  /**
+   * user edit profile
+   * @param token
+   * @param name
+   * @param gender
+   * @param avatar
+   * @return
+   */
   @RequestMapping(value = "/user/profile/edit", method = RequestMethod.POST)
   public BaseResponse editProfile(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
+      @RequestParam("name") String name, @RequestParam("gender") int gender,
       @RequestParam("avatar") MultipartFile avatar) {
-    BaseResponse editResponse = null;
+    BaseResponse response = null;
 
-    // delete token from pool
-    tokenManager.deleteToken(token);
-    return editResponse;
+    // check token's validation
+    if(!tokenManager.checkToken(token)) {
+      response = new FailureResponse(ErrorCode.User.TOKEN_EXPIRED);
+      return response;
+    }
+
+    // check user's existence
+    User user = userService.findUser(tokenManager.getUserId(token));
+    if(user == null) {
+      response = new FailureResponse(ErrorCode.User.USER_NOT_EXIST);
+      return response;
+    }
+
+    // check param's legality
+    if(StringUtils.isEmpty(name)) {
+      response = new FailureResponse(ErrorCode.User.EMPTY_NAME);
+      return response;
+    }
+    if(gender < 0 || gender > 2) {
+      response = new FailureResponse(ErrorCode.User.ILLEGAL_GENDER);
+      return response;
+    }
+
+    // save avatar
+    if(avatar != null) {
+      // check image format
+      if(!ImageUtils.isFormatSupported(FileUtils.getFileSuffix(avatar.getOriginalFilename()))) {
+        response = new FailureResponse(ErrorCode.Common.UNSUPPORTED_IMAGE_FORMAT);
+        return response;
+      }
+      // save image
+      Path absolutePath = null;
+      try {
+        absolutePath = storageService.store(avatar);
+      }
+      catch (StorageException e) {
+        logger.error("Could not save file", e);
+      }
+      if(absolutePath == null) {
+        response = new FailureResponse(ErrorCode.Common.UNABLE_SAVE_FILE);
+        return response;
+      }
+      // resolve relative path and save it
+      Path relativePath = storageService.getRelativePath(absolutePath);
+      user.setAvatarUrl(relativePath.toString());
+    }
+
+    // update user info
+    user = userService.updateUser(user);
+    if(user == null) {
+      response = new FailureResponse(ErrorCode.Common.OPERATION_EXCEPTION);
+      return response;
+    }
+
+    // encapsulate response
+    response = new EditProfileResponse(user);
+    return response;
   }
 
+  /**
+   * modify password
+   * @param token
+   * @param oldPassword
+   * @param newPassword
+   * @return
+   */
   @RequestMapping(value = "/user/password/modify", method = RequestMethod.POST)
   public BaseResponse modifyPassword(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
       @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword) {

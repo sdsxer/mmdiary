@@ -7,15 +7,14 @@ public class ErrorCode {
 
   private static final Map<Integer, String> codeMessageMap = new HashMap<Integer, String>();
 
-//  public static final int SUCCESS = 0;
-//  public static final int FAILED = -1;
-
   public class Common {
     private static final int BASE = 0;
     public static final int SUCCEED = BASE;
     public static final int UNAUTHORIZED = BASE + 1;
     public static final int ILLEGAL_PARAM = BASE + 2;
     public static final int OPERATION_EXCEPTION = BASE + 3;
+    public static final int UNSUPPORTED_IMAGE_FORMAT = BASE + 4;
+    public static final int UNABLE_SAVE_FILE = BASE + 5;
     public static final int UNKNOWN = -1;
   }
 
@@ -32,6 +31,9 @@ public class ErrorCode {
     public static final int ILLEGAL_OLD_PASSWORD = BASE + 9;
     public static final int ILLEGAL_NEW_PASSWORD = BASE + 10;
     public static final int INCORRECT_OLD_PASSWORD = BASE + 11;
+    public static final int EMPTY_NAME = BASE + 12;
+    public static final int ILLEGAL_GENDER = BASE + 13;
+    public static final int TOKEN_EXPIRED = BASE + 14;
   }
 
   public class Diary {
@@ -60,7 +62,10 @@ public class ErrorCode {
     codeMessageMap.put(Common.UNAUTHORIZED, "没有权限");
     codeMessageMap.put(Common.ILLEGAL_PARAM, "非法的参数");
     codeMessageMap.put(Common.OPERATION_EXCEPTION, "操作失败");
+    codeMessageMap.put(Common.UNSUPPORTED_IMAGE_FORMAT, "图片格式不支持");
+    codeMessageMap.put(Common.UNABLE_SAVE_FILE, "无法保存文件");
 
+    codeMessageMap.put(User.TOKEN_EXPIRED, "Token已过期");
     codeMessageMap.put(User.EMPTY_MOBILE_OR_PASSWORD, "手机或密码不能为空");
     codeMessageMap.put(User.USER_NOT_EXIST, "用户不存在");
     codeMessageMap.put(User.PASSWORD_NOT_CORRECT, "密码不正确");
@@ -72,6 +77,9 @@ public class ErrorCode {
     codeMessageMap.put(User.EMPTY_NEW_PASSWORD, "新密码不能为空");
     codeMessageMap.put(User.ILLEGAL_NEW_PASSWORD, "新密码格式错误");
     codeMessageMap.put(User.INCORRECT_OLD_PASSWORD, "原始密码错误");
+    codeMessageMap.put(User.EMPTY_NAME, "姓名不能为空");
+    codeMessageMap.put(User.ILLEGAL_GENDER, "非法的性别值");
+
 
     codeMessageMap.put(Diary.EMPTY_TITLE, "标题不能为空");
     codeMessageMap.put(Diary.EMPTY_CONTENT, "内容不能为空");
