@@ -1,6 +1,7 @@
 package com.sdsxer.mmdiary.utils;
 
 import com.google.common.base.Strings;
+import com.sdsxer.mmdiary.common.FileType;
 import java.io.File;
 import org.springframework.util.StringUtils;
 
@@ -38,5 +39,9 @@ public class FileUtils {
     } else {
       return 0;
     }
+  }
+
+  public static FileType getFileType(String filename) {
+    return null;
   }
 }

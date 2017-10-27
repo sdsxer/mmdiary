@@ -15,6 +15,7 @@ public class ErrorCode {
     public static final int OPERATION_EXCEPTION = BASE + 3;
     public static final int UNSUPPORTED_IMAGE_FORMAT = BASE + 4;
     public static final int UNABLE_SAVE_FILE = BASE + 5;
+    public static final int UNSUPPORTED_IMAGE_SIZE = BASE + 6;
     public static final int UNKNOWN = -1;
   }
 
@@ -63,6 +64,7 @@ public class ErrorCode {
     codeMessageMap.put(Common.ILLEGAL_PARAM, "非法的参数");
     codeMessageMap.put(Common.OPERATION_EXCEPTION, "操作失败");
     codeMessageMap.put(Common.UNSUPPORTED_IMAGE_FORMAT, "图片格式不支持");
+    codeMessageMap.put(Common.UNSUPPORTED_IMAGE_SIZE, "图片尺寸错误");
     codeMessageMap.put(Common.UNABLE_SAVE_FILE, "无法保存文件");
 
     codeMessageMap.put(User.TOKEN_EXPIRED, "Token已过期");

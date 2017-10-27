@@ -4,19 +4,15 @@ import com.sdsxer.mmdiary.config.StorageProperties;
 import com.sdsxer.mmdiary.utils.FileUtils;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
@@ -27,23 +23,27 @@ public class FileSystemStorageService implements StorageService {
 
     private static final Logger logger = LoggerFactory.getLogger(FileSystemStorageService.class);
 
-    private final Path location;
-
-    private StorageProperties properties;
+    private final Path rootLocation;
+    private final StorageProperties properties;
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
-        location = Paths.get(properties.getRootLocation() + File.separator
-            + properties.getProjectLocation());
-        logger.info("Storage config: location={}, capacity={}", location.toAbsolutePath(),
-            properties.getCapacity());
+        rootLocation = getRootLocation();
         this.properties = properties;
+        logger.info("Storage config: root location={}, capacity={}",
+            rootLocation.toAbsolutePath(), properties.getCapacity());
+        try {
+            init();
+        }
+        catch (StorageException e) {
+            logger.error("Could not initialize storage", e);
+        }
     }
 
     @Override
-    public void init() {
+    public void init() throws StorageException {
         try {
-            Files.createDirectories(location);
+            Files.createDirectories(rootLocation);
         }
         catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);
@@ -51,15 +51,37 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public Path store(MultipartFile file) {
+    public Path getRootLocation() {
+        return Paths.get(properties.getRootLocation());
+    }
+
+    @Override
+    public Path store(Path subPath, MultipartFile file) throws StorageException {
+        // check param's legality
         if(file == null) {
             throw new IllegalArgumentException();
         }
+        // check space limit
         long available = available();
-        if(available < file.getSize()) {
+        long fileSize = file.getSize();
+        if(available < fileSize) {
             throw new OverCapacityLimitException("Space available: " + available
-                + ", target file size: " + file.getSize());
+                + ", target file size: " + fileSize);
         }
+        // create sub dir
+        Path path = Paths.get(rootLocation.toString());
+        if(subPath != null) {
+            path = Paths.get(path.toString()
+                + (subPath.startsWith(File.separator) ? "" : File.separator)
+                + subPath.toString());
+            try {
+                Files.createDirectories(path);
+            }
+            catch (IOException e) {
+                throw new StorageException("Could not initialize storage", e);
+            }
+        }
+        // check file's legality
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if (file.isEmpty()) {
@@ -75,79 +97,27 @@ public class FileSystemStorageService implements StorageService {
             String fileSuffix = FileUtils.getFileSuffix(filename);
             filename = UUID.randomUUID() + "." + fileSuffix;
             // save file
-            Files.copy(file.getInputStream(), location.resolve(filename),
+            Files.copy(file.getInputStream(), path.resolve(filename),
                 StandardCopyOption.REPLACE_EXISTING);
         }
         catch (IOException e) {
             throw new StorageException("Failed to store file " + filename, e);
         }
-        return location.resolve(filename);
+        return path.resolve(filename);
     }
 
     @Override
-    public Path getRelativePath(Path absolutePath) throws StorageException {
-        Path relativePath = null;
-        if(absolutePath != null) {
-            try {
-                relativePath = Paths.get(properties.getProjectLocation(),
-                    absolutePath.getFileName().toString());
-            }
-            catch (Exception e) {
-                throw new StorageException("Can not covert path", e);
-            }
-        }
-        return relativePath;
-    }
-
-    @Override
-    public Stream<Path> loadAll() {
-        try {
-            return Files.walk(this.location, 1)
-                    .filter(path -> !path.equals(this.location))
-                    .map(path -> this.location.relativize(path));
-        }
-        catch (IOException e) {
-            throw new StorageException("Failed to read stored files", e);
-        }
-
-    }
-
-    @Override
-    public Path load(String filename) {
-        Path path = null;
-        try {
-            path = location.resolve(filename);
-        }
-        catch (InvalidPathException e) {
-            throw new StorageException("Failed to read stored file", e);
-        }
-        return path;
-    }
-
-    @Override
-    public Resource loadAsResource(String filename) {
-        try {
-            Path file = load(filename);
-            Resource resource = new UrlResource(file.toUri());
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            }
-            else {
-                throw new StorageFileNotFoundException("Could not read file: " + filename);
-            }
-        }
-        catch (MalformedURLException e) {
-            throw new StorageFileNotFoundException("Could not read file: " + filename, e);
-        }
+    public List<Path> loadAll() throws StorageException {
+        return null;
     }
 
     @Override
     public void deleteAll() {
-        FileSystemUtils.deleteRecursively(location.toFile());
+        FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }
 
     @Override
     public long available() {
-        return properties.getCapacity() - FileUtils.getDirSize(location.toAbsolutePath().toString());
+        return properties.getCapacity() - FileUtils.getDirSize(rootLocation.toString());
     }
 }

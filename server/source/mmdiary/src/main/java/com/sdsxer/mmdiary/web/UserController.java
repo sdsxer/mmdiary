@@ -4,8 +4,8 @@ import com.sdsxer.mmdiary.common.Constants;
 import com.sdsxer.mmdiary.common.ErrorCode;
 import com.sdsxer.mmdiary.domain.User;
 import com.sdsxer.mmdiary.service.UserService;
+import com.sdsxer.mmdiary.storage.AvatarStorageService;
 import com.sdsxer.mmdiary.storage.StorageException;
-import com.sdsxer.mmdiary.storage.StorageService;
 import com.sdsxer.mmdiary.utils.AccountValidatorUtils;
 import com.sdsxer.mmdiary.utils.FileUtils;
 import com.sdsxer.mmdiary.utils.ImageUtils;
@@ -15,7 +15,9 @@ import com.sdsxer.mmdiary.web.response.FailureResponse;
 import com.sdsxer.mmdiary.web.response.SuccessResponse;
 import com.sdsxer.mmdiary.web.response.user.EditProfileResponse;
 import com.sdsxer.mmdiary.web.response.user.LoginResponse;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +41,7 @@ public class UserController extends BaseController {
   private TokenManager tokenManager;
 
   @Autowired
-  private StorageService storageService;
+  private AvatarStorageService storageService;
 
   /**
    * user login
@@ -150,20 +152,31 @@ public class UserController extends BaseController {
         response = new FailureResponse(ErrorCode.Common.UNSUPPORTED_IMAGE_FORMAT);
         return response;
       }
-      // save image
-      Path absolutePath = null;
+      // check image size
       try {
-        absolutePath = storageService.store(avatar);
+        if(!ImageUtils.isImageSizeMatch(Constants.AVATAR_WIDTH,
+            Constants.AVATAR_HEIGHT, avatar.getInputStream())) {
+          response = new FailureResponse(ErrorCode.Common.UNSUPPORTED_IMAGE_SIZE);
+          return response;
+        }
+      } catch (IOException e) {
+        logger.warn("Couldn't fetch image size", e);
+        response = new FailureResponse(ErrorCode.Common.UNSUPPORTED_IMAGE_SIZE);
+        return response;
+      }
+      // save image
+      Path relativePath = null;
+      try {
+        relativePath = storageService.store(Paths.get(String.valueOf(user.getId())), avatar);
       }
       catch (StorageException e) {
         logger.error("Could not save file", e);
       }
-      if(absolutePath == null) {
+      if(relativePath == null) {
         response = new FailureResponse(ErrorCode.Common.UNABLE_SAVE_FILE);
         return response;
       }
-      // resolve relative path and save it
-      Path relativePath = storageService.getRelativePath(absolutePath);
+      // save path
       user.setAvatarUrl(relativePath.toString());
     }
 

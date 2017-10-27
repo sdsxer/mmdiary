@@ -1,13 +1,13 @@
 package com.sdsxer.mmdiary.web;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.sdsxer.mmdiary.common.Constants;
 import com.sdsxer.mmdiary.common.ErrorCode;
 import com.sdsxer.mmdiary.domain.Diary;
 import com.sdsxer.mmdiary.service.DiaryService;
+import com.sdsxer.mmdiary.storage.DiaryStorageService;
 import com.sdsxer.mmdiary.storage.StorageException;
-import com.sdsxer.mmdiary.storage.StorageService;
 import com.sdsxer.mmdiary.utils.FileUtils;
 import com.sdsxer.mmdiary.utils.ImageUtils;
 import com.sdsxer.mmdiary.utils.TokenManager;
@@ -18,7 +18,10 @@ import com.sdsxer.mmdiary.web.response.diary.CreateDiaryResponse;
 import com.sdsxer.mmdiary.web.response.diary.RetrieveDiaryListResponse;
 import com.sdsxer.mmdiary.web.response.diary.RetrieveDiaryResponse;
 import com.sdsxer.mmdiary.web.response.diary.UpdateDiaryResponse;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +43,7 @@ public class DiaryController extends BaseController {
   private DiaryService diaryService;
 
   @Autowired
-  private StorageService storageService;
+  private DiaryStorageService storageService;
 
   @Autowired
   private TokenManager tokenManager;
@@ -75,21 +78,32 @@ public class DiaryController extends BaseController {
       return response;
     }
 
-    // save image
-    Path absolutePath = null;
+    // check image size
     try {
-      absolutePath = storageService.store(file);
+      if(!ImageUtils.isImageSizeMatch(Constants.DIARY_COVER_WIDTH,
+          Constants.DIARY_COVER_HEIGHT, file.getInputStream())) {
+        response = new FailureResponse(ErrorCode.Common.UNSUPPORTED_IMAGE_SIZE);
+        return response;
+      }
+    } catch (IOException e) {
+      logger.warn("Couldn't fetch image size", e);
+      response = new FailureResponse(ErrorCode.Common.UNSUPPORTED_IMAGE_SIZE);
+      return response;
+    }
+
+    // save image
+    Path relativePath = null;
+    try {
+      relativePath = storageService.store(
+          Paths.get(tokenManager.getUserId(token) + File.separator + "cover"), file);
     }
     catch (StorageException e) {
       logger.error("Could not save file", e);
     }
-    if(absolutePath == null) {
+    if(relativePath == null) {
       response = new FailureResponse(ErrorCode.Diary.FAILED_TO_SAVE_IMAGE);
       return response;
     }
-
-    // resolve relative path and store to database
-    Path relativePath = storageService.getRelativePath(absolutePath);
 
     // insert diary into database
     Diary diary = diaryService.createDiary(tokenManager.getUserId(token), title, content, relativePath.toString());
@@ -153,18 +167,18 @@ public class DiaryController extends BaseController {
 
       // save image
       Path absolutePath = null;
-      try {
-        absolutePath = storageService.store(file);
-      }
-      catch (Exception e) {
-        logger.error("could not save file", e);
-      }
+//      try {
+//        absolutePath = storageService.store(file);
+//      }
+//      catch (Exception e) {
+//        logger.error("could not save file", e);
+//      }
       if(absolutePath == null) {
         response = new FailureResponse(ErrorCode.Diary.FAILED_TO_SAVE_IMAGE);
         return response;
       }
-      Path relativePath = storageService.getRelativePath(absolutePath);
-      originalDiary.setCoverUrl(relativePath.toString());
+//      Path relativePath = storageService.getRelativePath(absolutePath);
+//      originalDiary.setCoverUrl(relativePath.toString());
     }
 
     // update diary

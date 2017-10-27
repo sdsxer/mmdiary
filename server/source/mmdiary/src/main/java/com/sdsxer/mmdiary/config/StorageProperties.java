@@ -9,9 +9,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("storage")
 public class StorageProperties {
 
-    private String rootLocation = "/Users/leon/Desktop/tomcat/upload";
-    private String projectLocation = "/mmdiary/file";
-    private int capacity = 1024 * 1024 * 1024;
+    private String rootLocation = "/Users/leon/Desktop/nginx/nginx-1.7.5/html/mmdiary";
+    private int capacity = 1024 * 1024 * 1024; // 1G
 
     public String getRootLocation() {
         return rootLocation;
@@ -27,13 +26,5 @@ public class StorageProperties {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
-    }
-
-    public String getProjectLocation() {
-        return projectLocation;
-    }
-
-    public void setProjectLocation(String projectLocation) {
-        this.projectLocation = projectLocation;
     }
 }

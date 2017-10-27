@@ -1,23 +1,18 @@
 package com.sdsxer.mmdiary.storage;
 
 import java.nio.file.Path;
-import java.util.stream.Stream;
-import org.springframework.core.io.Resource;
+import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface StorageService {
 
     void init() throws StorageException;
 
-    Path store(MultipartFile file) throws StorageException;
+    Path getRootLocation();
 
-    Path getRelativePath(Path absolutePath) throws StorageException;
+    Path store(Path subPath, MultipartFile file) throws StorageException;
 
-    Stream<Path> loadAll() throws StorageException;
-
-    Path load(String filename) throws StorageException;
-
-    Resource loadAsResource(String filename) throws StorageException;
+    List<Path> loadAll() throws StorageException;
 
     void deleteAll();
 
