@@ -18,4 +18,9 @@ public class DiaryStorageService extends FileSystemStorageService {
     Path parentPath = super.getRootLocation();
     return Paths.get(parentPath.toAbsolutePath() + File.separator + "diary");
   }
+
+  @Override
+  public long available() {
+    return super.available();
+  }
 }

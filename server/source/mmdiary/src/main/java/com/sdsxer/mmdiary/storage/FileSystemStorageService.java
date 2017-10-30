@@ -1,5 +1,6 @@
 package com.sdsxer.mmdiary.storage;
 
+import com.sdsxer.mmdiary.common.Constants;
 import com.sdsxer.mmdiary.config.StorageProperties;
 import com.sdsxer.mmdiary.utils.FileUtils;
 import java.io.File;
@@ -25,13 +26,14 @@ public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
     private final StorageProperties properties;
+    private boolean init = false;
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
-        rootLocation = getRootLocation();
         this.properties = properties;
-        logger.info("Storage config: root location={}, capacity={}",
-            rootLocation.toAbsolutePath(), properties.getCapacity());
+        rootLocation = getRootLocation();
+        logger.info("{} config: root location={}, capacity={}",
+            this.getClass().getSimpleName(), rootLocation.toAbsolutePath(), properties.getCapacity());
         try {
             init();
         }
@@ -42,8 +44,13 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public void init() throws StorageException {
+        if(init) {
+            logger.info("Storage already init");
+            return;
+        }
         try {
             Files.createDirectories(rootLocation);
+            init = true;
         }
         catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);
@@ -57,6 +64,11 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public Path store(Path subPath, MultipartFile file) throws StorageException {
+        // check storage init yet
+        if(!init) {
+            logger.warn("Storage not init yet");
+            return null;
+        }
         // check param's legality
         if(file == null) {
             throw new IllegalArgumentException();
@@ -82,6 +94,7 @@ public class FileSystemStorageService implements StorageService {
             }
         }
         // check file's legality
+        Path finalPath = null;
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if (file.isEmpty()) {
@@ -92,27 +105,39 @@ public class FileSystemStorageService implements StorageService {
                 throw new StorageException(
                     "Cannot store file with relative path outside current directory " + filename);
             }
-
             // rename file with unique string
             String fileSuffix = FileUtils.getFileSuffix(filename);
             filename = UUID.randomUUID() + "." + fileSuffix;
             // save file
-            Files.copy(file.getInputStream(), path.resolve(filename),
-                StandardCopyOption.REPLACE_EXISTING);
+            finalPath = path.resolve(filename);
+            Files.copy(file.getInputStream(), finalPath, StandardCopyOption.REPLACE_EXISTING);
         }
         catch (IOException e) {
             throw new StorageException("Failed to store file " + filename, e);
         }
-        return path.resolve(filename);
+        // cover to relative path
+        Path projectPath = Paths.get(finalPath.toString().substring(finalPath.toString().indexOf(
+            Constants.APP_NAME)));
+        return projectPath;
     }
 
     @Override
     public List<Path> loadAll() throws StorageException {
+        // check storage init yet
+        if(!init) {
+            logger.warn("Storage not init yet");
+            return null;
+        }
         return null;
     }
 
     @Override
     public void deleteAll() {
+        // check storage init yet
+        if(!init) {
+            logger.warn("Storage not init yet");
+            return;
+        }
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }
 

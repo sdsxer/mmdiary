@@ -160,7 +160,7 @@ public class UserController extends BaseController {
           return response;
         }
       } catch (IOException e) {
-        logger.warn("Couldn't fetch image size", e);
+        logger.warn("Couldn't resolve image size", e);
         response = new FailureResponse(ErrorCode.Common.UNSUPPORTED_IMAGE_SIZE);
         return response;
       }

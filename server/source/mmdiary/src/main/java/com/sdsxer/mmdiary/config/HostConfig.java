@@ -16,18 +16,21 @@ public class HostConfig {
   @Bean
   @Profile(Constants.CONFIG_ENV_DEV)
   public HostInfo devHostInfo() {
-    return new HostInfo(Constants.DOMAIN_NAME_DEV, Constants.LISTENING_PORT_DEV);
+    return new HostInfo(Constants.DOMAIN_NAME_DEV, Constants.LISTENING_PORT_DEV,
+        Constants.NGINX_PORT_DEV);
   }
 
   @Bean
   @Profile(Constants.CONFIG_ENV_QA)
   public HostInfo qaHostInfo() {
-    return new HostInfo(Constants.DOMAIN_NAME_QA, Constants.LISTENING_PORT_QA);
+    return new HostInfo(Constants.DOMAIN_NAME_QA, Constants.LISTENING_PORT_QA,
+        Constants.NGINX_PORT_QA);
   }
 
   @Bean
   @Profile(Constants.CONFIG_ENV_PROD)
   public HostInfo prodHostInfo() {
-    return new HostInfo(Constants.DOMAIN_NAME_PROD, Constants.LISTENING_PORT_PROD);
+    return new HostInfo(Constants.DOMAIN_NAME_PROD, Constants.LISTENING_PORT_PROD,
+        Constants.NGINX_PORT_PROD);
   }
 }

@@ -6,16 +6,21 @@ package com.sdsxer.mmdiary.common;
  */
 public class Constants {
 
+  public static final String APP_NAME = "mmdiary";
+
   public static final int TOKEN_EXPIRES_HOUR = 72;
 
   public static final String DOMAIN_NAME_DEV = "127.0.0.1";
   public static final int LISTENING_PORT_DEV = 8080;
+  public static final int NGINX_PORT_DEV = 10080;
 
   public static final String DOMAIN_NAME_QA = "123.125.32.192";
   public static final int LISTENING_PORT_QA = 8080;
+  public static final int NGINX_PORT_QA = 10080;
 
   public static final String DOMAIN_NAME_PROD = "sdsxer.com";
   public static final int LISTENING_PORT_PROD = 8080;
+  public static final int NGINX_PORT_PROD = 10080;
 
   public static final String[] SUPPORTED_IMAGE_FORMAT = new String[]{"png", "jpg", "jpeg", "gif"};
   public static final String[] SUPPORTED_VIDEO_FORMAT = new String[]{"rmvb", "avi", "mp4", "3gp", "flv", "mkv", "mov", "wmv"};

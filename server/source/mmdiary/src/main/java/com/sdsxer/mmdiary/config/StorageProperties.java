@@ -1,5 +1,6 @@
 package com.sdsxer.mmdiary.config;
 
+import com.sdsxer.mmdiary.common.Constants;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -9,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("storage")
 public class StorageProperties {
 
-    private String rootLocation = "/Users/leon/Desktop/nginx/nginx-1.7.5/html/mmdiary";
+    private String rootLocation = "/usr/local/nginx/html/" + Constants.APP_NAME;
     private int capacity = 1024 * 1024 * 1024; // 1G
 
     public String getRootLocation() {

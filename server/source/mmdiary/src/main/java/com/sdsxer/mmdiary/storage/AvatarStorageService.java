@@ -4,11 +4,13 @@ import com.sdsxer.mmdiary.config.StorageProperties;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AvatarStorageService extends FileSystemStorageService {
 
+  @Autowired
   public AvatarStorageService(StorageProperties properties) {
     super(properties);
   }

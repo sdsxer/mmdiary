@@ -4,10 +4,12 @@ public class HostInfo {
 
   private String hostAddress;
   private int listeningPort;
+  private int nginxPort;
 
-  public HostInfo(String hostAddress, int listeningPort) {
+  public HostInfo(String hostAddress, int listeningPort, int nginxPort) {
     this.hostAddress = hostAddress;
     this.listeningPort = listeningPort;
+    this.nginxPort = nginxPort;
   }
 
   public String getHostAddress() {
@@ -24,5 +26,13 @@ public class HostInfo {
 
   public void setListeningPort(int listeningPort) {
     this.listeningPort = listeningPort;
+  }
+
+  public int getNginxPort() {
+    return nginxPort;
+  }
+
+  public void setNginxPort(int nginxPort) {
+    this.nginxPort = nginxPort;
   }
 }

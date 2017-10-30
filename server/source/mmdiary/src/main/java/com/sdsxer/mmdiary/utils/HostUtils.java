@@ -26,7 +26,7 @@ public class HostUtils {
     builder.append("http://");
     builder.append(hostUtils.hostInfo.getHostAddress());
     builder.append(":");
-    builder.append(hostUtils.hostInfo.getListeningPort());
+    builder.append(hostUtils.hostInfo.getNginxPort());
     if(!StringUtils.startsWith(relativePath, File.separator)) {
       builder.append(File.separator);
     }
