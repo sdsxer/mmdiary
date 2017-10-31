@@ -8,7 +8,7 @@ public class ErrorCode {
   private static final Map<Integer, String> codeMessageMap = new HashMap<Integer, String>();
 
   public class Common {
-    private static final int BASE = 0;
+    private static final int BASE = 1000;
     public static final int SUCCEED = BASE;
     public static final int UNAUTHORIZED = BASE + 1;
     public static final int ILLEGAL_PARAM = BASE + 2;
@@ -20,7 +20,7 @@ public class ErrorCode {
   }
 
   public class User {
-    private static final int BASE = 100;
+    private static final int BASE = 1100;
     public static final int EMPTY_MOBILE_OR_PASSWORD = BASE + 1;
     public static final int USER_NOT_EXIST = BASE + 2;
     public static final int PASSWORD_NOT_CORRECT = BASE + 3;
@@ -39,7 +39,7 @@ public class ErrorCode {
   }
 
   public class Diary {
-    private static final int BASE = 200;
+    private static final int BASE = 1200;
     public static final int EMPTY_TITLE = BASE +1;
     public static final int EMPTY_CONTENT = BASE + 2;
     public static final int EMPTY_COVER_IMAGE = BASE + 3;
@@ -53,7 +53,7 @@ public class ErrorCode {
   }
 
   public class Comment {
-    private static final int BASE = 300;
+    private static final int BASE = 1300;
     public static final int EMPTY_CONTENT = BASE + 1;
     public static final int COMMENT_NOT_EXIST = BASE + 2;
   }
