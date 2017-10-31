@@ -206,7 +206,8 @@ public class UserController extends BaseController {
     // delete old avatar if exist
     if(avatarUpdated) {
       try {
-        Files.delete(Paths.get(storageService.getRootLocation() + File.separator + originalAvatarPath));
+        Files.delete(Paths.get(storageService.getRootLocation()
+            + File.separator + originalAvatarPath));
       } catch (IOException e) {
         logger.warn("Could not delete old avatar file", e);
       }

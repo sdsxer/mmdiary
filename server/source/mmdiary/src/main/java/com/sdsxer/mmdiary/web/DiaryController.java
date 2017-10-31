@@ -20,6 +20,7 @@ import com.sdsxer.mmdiary.web.response.diary.RetrieveDiaryResponse;
 import com.sdsxer.mmdiary.web.response.diary.UpdateDiaryResponse;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
@@ -88,12 +89,12 @@ public class DiaryController extends BaseController {
     try {
       if(!ImageUtils.isImageSizeMatch(Constants.DIARY_COVER_WIDTH,
           Constants.DIARY_COVER_HEIGHT, file.getInputStream())) {
-        response = new FailureResponse(ErrorCode.Common.UNSUPPORTED_IMAGE_SIZE);
+        response = new FailureResponse(ErrorCode.User.UNSUPPORTED_AVATAR_SIZE);
         return response;
       }
     } catch (IOException e) {
       logger.warn("Couldn't fetch image size", e);
-      response = new FailureResponse(ErrorCode.Common.UNSUPPORTED_IMAGE_SIZE);
+      response = new FailureResponse(ErrorCode.User.UNSUPPORTED_AVATAR_SIZE);
       return response;
     }
 
@@ -133,6 +134,7 @@ public class DiaryController extends BaseController {
   public BaseResponse updateDiary(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
       @RequestParam("id") long id, @RequestParam("title") String title,
       @RequestParam("content") String content, @RequestParam("file") MultipartFile file) {
+
     BaseResponse response = null;
 
     // retrieve original diary
@@ -149,13 +151,11 @@ public class DiaryController extends BaseController {
       return response;
     }
 
-    // check diary id's legality
+    // check params's legality
     if(id <= 0) {
       response = new FailureResponse(ErrorCode.Diary.ILLEGAL_ID);
       return response;
     }
-
-    // check params's legality
     if(StringUtils.isEmpty(title) || StringUtils.isEmpty(content)) {
       response = new FailureResponse(ErrorCode.Common.ILLEGAL_PARAM);
       return response;
@@ -165,28 +165,44 @@ public class DiaryController extends BaseController {
     originalDiary.setTitle(title);
     originalDiary.setContent(content);
 
-    // update image
+    // update cover image
+    String originalCoverImagePath = originalDiary.getCoverUrl();
+    boolean coverImageUpdated = false;
     if(file != null) {
-      // check image format
+      // check cover image format
       if(!ImageUtils.isFormatSupported(FileUtils.getFileSuffix(file.getOriginalFilename()))) {
         response = new FailureResponse(ErrorCode.Diary.ILLEGAL_IMAGE_FORMAT);
         return response;
       }
+      // check cover image size
+      try {
+        if(!ImageUtils.isImageSizeMatch(Constants.DIARY_COVER_WIDTH, Constants.DIARY_COVER_HEIGHT,
+            file.getInputStream())) {
+          response = new FailureResponse(ErrorCode.User.UNSUPPORTED_AVATAR_SIZE);
+          return response;
+        }
+      } catch (IOException e) {
+        logger.warn("Couldn't fetch image size", e);
+        response = new FailureResponse(ErrorCode.User.UNSUPPORTED_AVATAR_SIZE);
+        return response;
+      }
 
       // save image
-      Path absolutePath = null;
-//      try {
-//        absolutePath = storageService.store(file);
-//      }
-//      catch (Exception e) {
-//        logger.error("could not save file", e);
-//      }
-      if(absolutePath == null) {
+      Date now = new Date();
+      Path relativePath = null;
+      try {
+        relativePath = storageService.storeCoverImage(tokenManager.getUserId(token),
+            now.getTime(), file);
+      }
+      catch (Exception e) {
+        logger.error("could not save file", e);
+      }
+      if(relativePath == null) {
         response = new FailureResponse(ErrorCode.Diary.FAILED_TO_SAVE_IMAGE);
         return response;
       }
-//      Path relativePath = storageService.getRelativePath(absolutePath);
-//      originalDiary.setCoverUrl(relativePath.toString());
+      originalDiary.setCoverUrl(relativePath.toString());
+      coverImageUpdated = true;
     }
 
     // update diary
@@ -195,6 +211,16 @@ public class DiaryController extends BaseController {
     if(diary == null) {
       response = new FailureResponse(ErrorCode.Diary.UNABLE_UPDATE_DIARY);
       return response;
+    }
+
+    // delete old cover image
+    if(coverImageUpdated) {
+      try {
+        Files.delete(Paths.get(storageService.getRootLocation()
+            + File.separator + originalCoverImagePath));
+      } catch (IOException e) {
+        logger.warn("Could not delete old cover image file", e);
+      }
     }
 
     // encapsulate response
