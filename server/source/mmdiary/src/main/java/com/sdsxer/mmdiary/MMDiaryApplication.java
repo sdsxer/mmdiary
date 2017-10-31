@@ -13,7 +13,10 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.DispatcherServlet;
 
 /**
  * Application entrance
@@ -41,9 +44,20 @@ public class MMDiaryApplication extends SpringBootServletInitializer implements
     SpringApplication.run(MMDiaryApplication.class, args);
   }
 
+  // custom listening port
   @Override
   public void customize(ConfigurableEmbeddedServletContainer container) {
     logger.info("Server listening port: {}", hostInfo.getListeningPort());
     container.setPort(hostInfo.getListeningPort());
+  }
+
+  // set 404 response handler
+  @Bean
+  public ServletRegistrationBean dispatcherRegistration(DispatcherServlet dispatcherServlet) {
+    ServletRegistrationBean registration = new ServletRegistrationBean(dispatcherServlet);
+    // 当出现 404 错误时, 直接抛出异常
+    dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
+    // 不要为工程中的资源文件建立映射
+    return registration;
   }
 }

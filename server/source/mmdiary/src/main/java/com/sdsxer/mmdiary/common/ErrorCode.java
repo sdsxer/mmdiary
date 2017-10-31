@@ -9,7 +9,7 @@ public class ErrorCode {
 
   public class Common {
     private static final int BASE = 1000;
-    public static final int SUCCEED = BASE;
+    public static final int SUCCEED = 0;
     public static final int UNAUTHORIZED = BASE + 1;
     public static final int ILLEGAL_PARAM = BASE + 2;
     public static final int OPERATION_EXCEPTION = BASE + 3;
