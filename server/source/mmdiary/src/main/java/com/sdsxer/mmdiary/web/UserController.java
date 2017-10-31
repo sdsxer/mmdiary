@@ -112,12 +112,6 @@ public class UserController extends BaseController {
 
     BaseResponse response = null;
 
-    // check token's validation
-    if(!tokenManager.checkToken(token)) {
-      response = new FailureResponse(ErrorCode.User.TOKEN_EXPIRED);
-      return response;
-    }
-
     // delete token from pool
     tokenManager.deleteToken(token);
 
@@ -140,12 +134,6 @@ public class UserController extends BaseController {
       @RequestParam("avatar") MultipartFile avatar) {
 
     BaseResponse response = null;
-
-    // check token's validation
-    if(!tokenManager.checkToken(token)) {
-      response = new FailureResponse(ErrorCode.User.TOKEN_EXPIRED);
-      return response;
-    }
 
     // check user's existence
     User user = userService.findUser(tokenManager.getUserId(token));

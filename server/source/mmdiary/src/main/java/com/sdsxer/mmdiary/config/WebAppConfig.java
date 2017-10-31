@@ -1,8 +1,17 @@
 package com.sdsxer.mmdiary.config;
 
+import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.sdsxer.mmdiary.common.Constants;
+import com.sdsxer.mmdiary.common.ErrorCode;
+import com.sdsxer.mmdiary.domain.User;
+import com.sdsxer.mmdiary.service.UserService;
 import com.sdsxer.mmdiary.utils.TokenManager;
+import com.sdsxer.mmdiary.web.response.FailureResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.ArrayUtils;
@@ -24,6 +33,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class WebAppConfig extends WebMvcConfigurerAdapter {
 
   private static final Logger logger = LoggerFactory.getLogger(WebAppConfig.class);
+
+  @Autowired
+  private UserService userService;
 
   @Autowired
   private TokenManager tokenManager;
@@ -48,8 +60,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
-        Object handler)
-        throws Exception {
+        Object handler) throws Exception {
 
       // login request, ignore
       String requestServletPath = request.getServletPath();
@@ -65,21 +76,47 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         return true;
       }
 
+      ObjectMapper mapper = new ObjectMapper();
+
+      // check user's existence
+      User user = userService.findUser(tokenManager.getUserId(token));
+      if(user == null) {
+        returnJson(response, mapper.writeValueAsString(
+            new FailureResponse(ErrorCode.User.USER_NOT_EXIST)));
+        return false;
+      }
+
       // send response
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      returnJson(response, mapper.writeValueAsString(
+          new FailureResponse(HttpServletResponse.SC_UNAUTHORIZED, "未授权的用户")));
       return false;
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
         ModelAndView modelAndView) throws Exception {
-      // to do
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
         Object handler, Exception ex) throws Exception {
-      // to do
+    }
+
+    private void returnJson(HttpServletResponse response, String json) throws Exception {
+      PrintWriter writer = null;
+//      response.setCharacterEncoding("UTF-8");
+//      response.setContentType("text/plain; charset=utf-8");
+      try {
+        writer = response.getWriter();
+        writer.print(json);
+      } catch (IOException e) {
+        logger.error("Response error", e);
+      } finally {
+        if (writer != null) {
+          writer.close();
+        }
+      }
     }
   }
 }

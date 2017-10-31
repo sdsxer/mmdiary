@@ -48,19 +48,26 @@ public class DiaryController extends BaseController {
   @Autowired
   private TokenManager tokenManager;
 
+  /**
+   * create diary
+   * @param token
+   * @param title
+   * @param content
+   * @param file
+   * @return
+   */
   @RequestMapping(value = "/diary/create", method = RequestMethod.POST)
   public BaseResponse createDiary(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
       @RequestParam("title") String title, @RequestParam("content") String content,
       @RequestParam("file") MultipartFile file) {
+
     BaseResponse response = null;
 
-    // check if title empty
+    // check params's legality
     if(StringUtils.isEmpty(title)) {
       response = new FailureResponse(ErrorCode.Diary.EMPTY_TITLE);
       return response;
     }
-
-    // check if content empty
     if(StringUtils.isEmpty(content)) {
       response = new FailureResponse(ErrorCode.Diary.EMPTY_CONTENT);
       return response;
