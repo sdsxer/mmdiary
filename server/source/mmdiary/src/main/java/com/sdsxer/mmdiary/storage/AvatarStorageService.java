@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class AvatarStorageService extends FileSystemStorageService {
@@ -24,5 +25,9 @@ public class AvatarStorageService extends FileSystemStorageService {
   @Override
   public long available() {
     return super.available();
+  }
+
+  public Path storeAvatarImage(long userId, MultipartFile file) {
+    return super.store(Paths.get(String.valueOf(userId)), file);
   }
 }

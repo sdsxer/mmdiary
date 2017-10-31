@@ -20,7 +20,8 @@ public class DiaryService {
   @Autowired
   private DiaryDao diaryDao;
 
-  public Diary createDiary(long userId, String title, String content, String coverUrl) {
+  public Diary createDiary(long userId, String title, String content,
+      String coverUrl, Date createTime) {
     Diary diary = new Diary();
     diary.setTitle(title);
     diary.setContent(content);
@@ -28,9 +29,8 @@ public class DiaryService {
     User author = new User();
     author.setId(userId);
     diary.setUser(author);
-    Date now = new Date();
-    diary.setCreateTime(now);
-    diary.setLastModifiedTime(now);
+    diary.setCreateTime(createTime);
+    diary.setLastModifiedTime(createTime);
     return diaryDao.save(diary);
   }
 

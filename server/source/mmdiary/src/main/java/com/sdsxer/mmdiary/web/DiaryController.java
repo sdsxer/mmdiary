@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,20 +73,18 @@ public class DiaryController extends BaseController {
       response = new FailureResponse(ErrorCode.Diary.EMPTY_CONTENT);
       return response;
     }
-
-    // check if image empty
     if(file == null) {
       response = new FailureResponse(ErrorCode.Diary.EMPTY_COVER_IMAGE);
       return response;
     }
 
-    // check image format
+    // check cover image format
     if(!ImageUtils.isFormatSupported(FileUtils.getFileSuffix(file.getOriginalFilename()))) {
       response = new FailureResponse(ErrorCode.Diary.ILLEGAL_IMAGE_FORMAT);
       return response;
     }
 
-    // check image size
+    // check cover image size
     try {
       if(!ImageUtils.isImageSizeMatch(Constants.DIARY_COVER_WIDTH,
           Constants.DIARY_COVER_HEIGHT, file.getInputStream())) {
@@ -99,10 +98,11 @@ public class DiaryController extends BaseController {
     }
 
     // save image
+    Date now = new Date();
     Path relativePath = null;
     try {
-      relativePath = storageService.store(
-          Paths.get(tokenManager.getUserId(token) + File.separator + "cover"), file);
+      relativePath = storageService.storeCoverImage(tokenManager.getUserId(token),
+          now.getTime(), file);
     }
     catch (StorageException e) {
       logger.error("Could not save file", e);
@@ -113,13 +113,14 @@ public class DiaryController extends BaseController {
     }
 
     // insert diary into database
-    Diary diary = diaryService.createDiary(tokenManager.getUserId(token), title, content, relativePath.toString());
+    Diary diary = diaryService.createDiary(tokenManager.getUserId(token), title, content,
+        relativePath.toString(), now);
     if(diary == null) {
       response = new FailureResponse(ErrorCode.Diary.UNABLE_CREATE_DIARY);
       return response;
     }
 
-    // no need full user info, author is user himself
+    // no need return user field, author is user himself
     diary.setUser(null);
 
     // encapsulate response

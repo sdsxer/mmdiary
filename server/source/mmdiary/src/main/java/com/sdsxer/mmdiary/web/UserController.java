@@ -182,7 +182,7 @@ public class UserController extends BaseController {
       // save image
       Path relativePath = null;
       try {
-        relativePath = storageService.store(Paths.get(String.valueOf(user.getId())), avatar);
+        relativePath = storageService.storeAvatarImage(user.getId(), avatar);
       }
       catch (StorageException e) {
         logger.error("Could not save file", e);
