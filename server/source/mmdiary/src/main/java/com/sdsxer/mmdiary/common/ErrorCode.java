@@ -35,6 +35,7 @@ public class ErrorCode {
     public static final int EMPTY_NAME = BASE + 12;
     public static final int ILLEGAL_GENDER = BASE + 13;
     public static final int TOKEN_EXPIRED = BASE + 14;
+    public static final int UNABLE_CREATE_TOKEN = BASE + 15;
   }
 
   public class Diary {
@@ -81,6 +82,7 @@ public class ErrorCode {
     codeMessageMap.put(User.INCORRECT_OLD_PASSWORD, "原始密码错误");
     codeMessageMap.put(User.EMPTY_NAME, "姓名不能为空");
     codeMessageMap.put(User.ILLEGAL_GENDER, "非法的性别值");
+    codeMessageMap.put(User.UNABLE_CREATE_TOKEN, "无法创建Token");
 
 
     codeMessageMap.put(Diary.EMPTY_TITLE, "标题不能为空");

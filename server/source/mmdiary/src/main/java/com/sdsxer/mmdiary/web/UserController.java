@@ -15,7 +15,9 @@ import com.sdsxer.mmdiary.web.response.FailureResponse;
 import com.sdsxer.mmdiary.web.response.SuccessResponse;
 import com.sdsxer.mmdiary.web.response.user.EditProfileResponse;
 import com.sdsxer.mmdiary.web.response.user.LoginResponse;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.apache.commons.lang3.StringUtils;
@@ -52,6 +54,7 @@ public class UserController extends BaseController {
   @RequestMapping(value = "/user/login", method = RequestMethod.POST)
   public BaseResponse login(@RequestParam(value = "mobile") String mobile,
       @RequestParam(value = "password") String password) {
+
     BaseResponse loginResponse;
 
     // check mobile and password's format
@@ -87,8 +90,12 @@ public class UserController extends BaseController {
       return loginResponse;
     }
 
-    // save token, if user already have a token, then it will be replaced by new one
+    // save token, if user already have one, then it will be replaced by the new one
     String token = tokenManager.createToken(user.getId());
+    if(StringUtils.isEmpty(token)) {
+      loginResponse = new FailureResponse(ErrorCode.User.UNABLE_CREATE_TOKEN);
+      return loginResponse;
+    }
 
     // encapsulate response
     loginResponse = new LoginResponse(token, user);
@@ -102,10 +109,21 @@ public class UserController extends BaseController {
    */
   @RequestMapping(value = "/user/logout", method = RequestMethod.POST)
   public BaseResponse logout(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token) {
-    BaseResponse logoutResponse = new SuccessResponse();
+
+    BaseResponse response = null;
+
+    // check token's validation
+    if(!tokenManager.checkToken(token)) {
+      response = new FailureResponse(ErrorCode.User.TOKEN_EXPIRED);
+      return response;
+    }
+
     // delete token from pool
     tokenManager.deleteToken(token);
-    return logoutResponse;
+
+    // encapsulate response
+    response = new SuccessResponse();
+    return response;
   }
 
   /**
@@ -120,6 +138,7 @@ public class UserController extends BaseController {
   public BaseResponse editProfile(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
       @RequestParam("name") String name, @RequestParam("gender") int gender,
       @RequestParam("avatar") MultipartFile avatar) {
+
     BaseResponse response = null;
 
     // check token's validation
@@ -136,14 +155,18 @@ public class UserController extends BaseController {
     }
 
     // check param's legality
-    if(StringUtils.isEmpty(name)) {
+    if(StringUtils.isEmpty(name)) { // name
       response = new FailureResponse(ErrorCode.User.EMPTY_NAME);
       return response;
     }
-    if(gender < 0 || gender > 2) {
+    if(gender < 0 || gender > 2) { // gender
       response = new FailureResponse(ErrorCode.User.ILLEGAL_GENDER);
       return response;
     }
+
+    // save old avatar path
+    String originalAvatarPath = user.getAvatarUrl();
+    boolean avatarUpdated = false;
 
     // save avatar
     if(avatar != null) {
@@ -176,8 +199,9 @@ public class UserController extends BaseController {
         response = new FailureResponse(ErrorCode.Common.UNABLE_SAVE_FILE);
         return response;
       }
-      // save path
+      // save avatar path
       user.setAvatarUrl(relativePath.toString());
+      avatarUpdated = true;
     }
 
     // update user info
@@ -185,6 +209,15 @@ public class UserController extends BaseController {
     if(user == null) {
       response = new FailureResponse(ErrorCode.Common.OPERATION_EXCEPTION);
       return response;
+    }
+
+    // delete old avatar if exist
+    if(avatarUpdated) {
+      try {
+        Files.delete(Paths.get(storageService.getRootLocation() + File.separator + originalAvatarPath));
+      } catch (IOException e) {
+        logger.warn("Could not delete old avatar file", e);
+      }
     }
 
     // encapsulate response
@@ -195,18 +228,19 @@ public class UserController extends BaseController {
   /**
    * modify password
    * @param token
-   * @param oldPassword
-   * @param newPassword
+   * @param oldPassword md5 encrypted password
+   * @param newPassword md5 encrypted password
    * @return
    */
   @RequestMapping(value = "/user/password/modify", method = RequestMethod.POST)
   public BaseResponse modifyPassword(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
       @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword) {
+
     BaseResponse response = null;
 
     // check token's validation
     if(!tokenManager.checkToken(token)) {
-      response = new FailureResponse(ErrorCode.User.INVALID_USER);
+      response = new FailureResponse(ErrorCode.User.TOKEN_EXPIRED);
       return response;
     }
 
@@ -230,13 +264,15 @@ public class UserController extends BaseController {
       return response;
     }
 
-    // check old password's correction
+    // check user's existence
     User user = userService.findUser(tokenManager.getUserId(token));
     if(user == null) {
-      response = new FailureResponse(ErrorCode.Common.UNKNOWN);
+      response = new FailureResponse(ErrorCode.User.USER_NOT_EXIST);
       return response;
     }
-    if(!StringUtils.equalsIgnoreCase(user.getPassword(), oldPassword)) {
+
+    // check old password's correction
+    if(!StringUtils.equals(user.getPassword(), oldPassword)) {
       response = new FailureResponse(ErrorCode.User.INCORRECT_OLD_PASSWORD);
       return response;
     }
