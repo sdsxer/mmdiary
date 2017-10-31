@@ -164,6 +164,10 @@ public class UserController extends BaseController {
       return response;
     }
 
+    // save params
+    user.setName(name);
+    user.setGender(gender);
+
     // save old avatar path
     String originalAvatarPath = user.getAvatarUrl();
     boolean avatarUpdated = false;
