@@ -19,13 +19,13 @@ public class GlobalExceptionHandler {
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ResponseBody
   public FailureResponse noHandlerFoundException(Exception e) {
-    return new FailureResponse();
+    return new FailureResponse(HttpStatus.NOT_FOUND.value(), "not found");
   }
 
   @ExceptionHandler(value = { Exception.class })
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ResponseBody
   public FailureResponse unknownException(Exception e) {
-    return new FailureResponse();
+    return new FailureResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getClass().getName());
   }
 }

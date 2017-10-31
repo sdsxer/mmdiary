@@ -13,4 +13,9 @@ public class FailureResponse extends BaseResponse {
     this.errorCode = errorCode;
     this.errorMessage = ErrorCode.getErrorMessage(this.errorCode);
   }
+
+  public FailureResponse(int errorCode, String errorMessage) {
+    this.errorCode = errorCode;
+    this.errorMessage = errorMessage;
+  }
 }
