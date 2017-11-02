@@ -2,6 +2,7 @@ package com.sdsxer.mmdiary.service;
 
 import com.sdsxer.mmdiary.domain.User;
 import com.sdsxer.mmdiary.repository.UserDao;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +22,9 @@ public class UserService {
 
   public User updateUser(User user) {
     return userDao.saveAndFlush(user);
+  }
+
+  public List<User> findAllUsers() {
+    return userDao.findAll();
   }
 }
