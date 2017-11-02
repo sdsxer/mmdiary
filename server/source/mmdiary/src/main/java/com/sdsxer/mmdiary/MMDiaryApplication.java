@@ -3,7 +3,7 @@ package com.sdsxer.mmdiary;
 
 import com.sdsxer.mmdiary.common.Constants;
 import com.sdsxer.mmdiary.config.StorageProperties;
-import com.sdsxer.mmdiary.domain.HostInfo;
+import com.sdsxer.mmdiary.global.HostInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

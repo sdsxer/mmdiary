@@ -1,7 +1,5 @@
 package com.sdsxer.mmdiary.config;
 
-import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.sdsxer.mmdiary.common.Constants;

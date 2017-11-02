@@ -1,6 +1,6 @@
 package com.sdsxer.mmdiary.utils;
 
-import com.sdsxer.mmdiary.domain.HostInfo;
+import com.sdsxer.mmdiary.global.HostInfo;
 import java.io.File;
 import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;

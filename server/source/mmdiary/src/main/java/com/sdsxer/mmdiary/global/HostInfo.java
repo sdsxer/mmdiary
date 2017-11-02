@@ -1,10 +1,17 @@
-package com.sdsxer.mmdiary.domain;
+package com.sdsxer.mmdiary.global;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class HostInfo {
 
   private String hostAddress;
   private int listeningPort;
   private int nginxPort;
+
+  public HostInfo() {
+
+  }
 
   public HostInfo(String hostAddress, int listeningPort, int nginxPort) {
     this.hostAddress = hostAddress;

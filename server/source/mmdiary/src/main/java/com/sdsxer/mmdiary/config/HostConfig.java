@@ -1,9 +1,7 @@
 package com.sdsxer.mmdiary.config;
 
 import com.sdsxer.mmdiary.common.Constants;
-import com.sdsxer.mmdiary.domain.HostInfo;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
+import com.sdsxer.mmdiary.global.HostInfo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -11,10 +9,8 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 public class HostConfig {
 
-//  private static final Logger logger = LoggerFactory.getLogger(HostConfig.class);
-
   @Bean
-  @Profile(Constants.CONFIG_ENV_DEV)
+  @Profile({Constants.CONFIG_ENV_DEV})
   public HostInfo devHostInfo() {
     return new HostInfo(Constants.DOMAIN_NAME_DEV, Constants.LISTENING_PORT_DEV,
         Constants.NGINX_PORT_DEV);

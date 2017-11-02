@@ -2,6 +2,7 @@ package com.sdsxer.mmdiary.dto;
 
 import com.sdsxer.mmdiary.domain.Comment;
 import com.sdsxer.mmdiary.domain.User;
+import org.springframework.stereotype.Component;
 
 public class CommentDto {
 
