@@ -34,8 +34,14 @@ public class CommentController extends BaseController {
   @Autowired
   private TokenManager tokenManager;
 
+  /**
+   * create comment
+   * @param content
+   * @return
+   */
   @RequestMapping(value = "/comment/create", method = RequestMethod.POST)
   public BaseResponse createDiary(@RequestParam("content") String content) {
+
     BaseResponse response = null;
 
     // check param's legality
@@ -58,18 +64,21 @@ public class CommentController extends BaseController {
     return response;
   }
 
-
+  /**
+   * update comment
+   * @param token
+   * @param id
+   * @param content
+   * @return
+   */
   @RequestMapping(value = "/comment/update", method = RequestMethod.POST)
   public BaseResponse updateComment(@RequestParam(Constants.REQUEST_HEADER_TOKEN) String token,
   @RequestParam("id") long id, @RequestParam("content") String content) {
+
     BaseResponse response = null;
 
     // check params's legality
-    if(id <= 0) {
-      response = new FailureResponse(ErrorCode.Common.ILLEGAL_PARAM);
-      return response;
-    }
-    if(StringUtils.isEmpty(content)) {
+    if(id <= 0 || StringUtils.isEmpty(content)) {
       response = new FailureResponse(ErrorCode.Common.ILLEGAL_PARAM);
       return response;
     }
@@ -102,10 +111,16 @@ public class CommentController extends BaseController {
     return response;
   }
 
-
+  /**
+   * retrieve comment list
+   * @param index
+   * @param size
+   * @return
+   */
   @RequestMapping(value = "/comment/retrieve/list", method = RequestMethod.POST)
   public BaseResponse retrieveCommentList(@RequestParam("index") long index,
       @RequestParam("size") int size) {
+
     BaseResponse response = null;
 
     // check params's legality
@@ -125,9 +140,16 @@ public class CommentController extends BaseController {
     return response;
   }
 
+  /**
+   * delete comment
+   * @param token
+   * @param id
+   * @return
+   */
   @RequestMapping(value = "/comment/delete", method = RequestMethod.POST)
   public BaseResponse deleteComment(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
       @RequestParam("id") long id) {
+
     BaseResponse response = null;
 
     // check params's legality
@@ -138,20 +160,20 @@ public class CommentController extends BaseController {
 
     Comment comment = commentService.retrieveComment(id);
 
-    // check whether comment exist
+    // check comment's existence
     if(comment == null) {
       response = new FailureResponse(ErrorCode.Comment.COMMENT_NOT_EXIST);
       return response;
     }
 
-    // only author and admin have authorize to delete comment
+    // check user's authority
     long userId = tokenManager.getUserId(token);
     if(comment.getUser() == null || comment.getUser().getId() != userId) {
       response = new FailureResponse(ErrorCode.Common.UNAUTHORIZED);
       return response;
     }
 
-    // delete diary
+    // delete comment
     commentService.deleteComment(id);
 
     // encapsulate response

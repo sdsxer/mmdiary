@@ -28,4 +28,11 @@ public class GlobalExceptionHandler {
   public FailureResponse unknownException(Exception e) {
     return new FailureResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getClass().getName());
   }
+
+  @ExceptionHandler(value = { MMException.class })
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  @ResponseBody
+  public FailureResponse customException(Exception e) {
+    return new FailureResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getClass().getName());
+  }
 }

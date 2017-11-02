@@ -130,6 +130,15 @@ public class DiaryController extends BaseController {
   }
 
 
+  /**
+   * update diary
+   * @param token
+   * @param id
+   * @param title
+   * @param content
+   * @param file
+   * @return
+   */
   @RequestMapping(value = "/diary/update", method = RequestMethod.POST)
   public BaseResponse updateDiary(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
       @RequestParam("id") long id, @RequestParam("title") String title,
@@ -228,8 +237,14 @@ public class DiaryController extends BaseController {
     return response;
   }
 
+  /**
+   * retrieve diary
+   * @param id
+   * @return
+   */
   @RequestMapping(value = "/diary/retrieve", method = RequestMethod.POST)
   public BaseResponse retrieveDiary(@RequestParam("id") long id) {
+
     BaseResponse response = null;
 
     // check param's legality
@@ -252,8 +267,16 @@ public class DiaryController extends BaseController {
     return response;
   }
 
+  /**
+   * retrieve diary list
+   * @param index
+   * @param size
+   * @return
+   */
   @RequestMapping(value = "/diary/retrieve/list", method = RequestMethod.POST)
-  public BaseResponse retrieveDiaryList(@RequestParam("index") int index, @RequestParam("size") int size) {
+  public BaseResponse retrieveDiaryList(@RequestParam("index") int index,
+      @RequestParam("size") int size) {
+
     BaseResponse response = null;
 
     // check params's legality
@@ -274,9 +297,16 @@ public class DiaryController extends BaseController {
     return response;
   }
 
+  /**
+   * delete diary
+   * @param token
+   * @param id
+   * @return
+   */
   @RequestMapping(value = "/diary/delete", method = RequestMethod.POST)
   public BaseResponse deleteDiary(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
       @RequestParam("id") long id) {
+
     BaseResponse response = null;
 
     // check id's legality
