@@ -131,7 +131,7 @@ public class UserController extends BaseController {
   @RequestMapping(value = "/user/profile/edit", method = RequestMethod.POST)
   public BaseResponse editProfile(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
       @RequestParam("name") String name, @RequestParam("gender") int gender,
-      @RequestParam("avatar") MultipartFile avatar) {
+      @RequestParam(value = "avatar", required = false) MultipartFile avatar) {
 
     BaseResponse response = null;
 
