@@ -88,7 +88,6 @@ public class User {
 
   @Override
   public String toString() {
-//    return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
-    return String.format("[id=%d]", id);
+    return String.format("[id=%d, name=%s, mobile=%s, ]", id, name, mobile);
   }
 }

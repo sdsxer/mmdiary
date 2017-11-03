@@ -13,11 +13,13 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -60,10 +62,18 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) throws Exception {
 
-      // login request, ignore
+      ObjectMapper mapper = new ObjectMapper();
       String requestServletPath = request.getServletPath();
-      if(!Strings.isNullOrEmpty(requestServletPath)
-          && requestServletPath.equalsIgnoreCase("/user/login")) {
+
+      // empty request path, return error
+      if(Strings.isNullOrEmpty(requestServletPath)) {
+        response.setStatus(HttpStatus.BAD_REQUEST.value());
+        returnJson(response, mapper.writeValueAsString(new FailureResponse(HttpStatus.BAD_REQUEST)));
+        return false;
+      }
+
+      // login request, ignore
+      if(StringUtils.equalsIgnoreCase(requestServletPath, "/user/login")) {
         return true;
       }
 
@@ -74,8 +84,6 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         return true;
       }
 
-      ObjectMapper mapper = new ObjectMapper();
-
       // check user's existence
       User user = userService.findUser(tokenManager.getUserId(token));
       if(user == null) {
@@ -84,10 +92,9 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         return false;
       }
 
-      // send response
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      returnJson(response, mapper.writeValueAsString(
-          new FailureResponse(HttpServletResponse.SC_UNAUTHORIZED, "未授权的用户")));
+      // unauthorized user, return error
+      response.setStatus(HttpStatus.UNAUTHORIZED.value());
+      returnJson(response, mapper.writeValueAsString(new FailureResponse(HttpStatus.UNAUTHORIZED)));
       return false;
     }
 
@@ -103,8 +110,8 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 
     private void returnJson(HttpServletResponse response, String json) throws Exception {
       PrintWriter writer = null;
-//      response.setCharacterEncoding("UTF-8");
-//      response.setContentType("text/plain; charset=utf-8");
+      response.setCharacterEncoding("UTF-8");
+      response.setContentType("application/json; charset=utf-8");
       try {
         writer = response.getWriter();
         writer.print(json);

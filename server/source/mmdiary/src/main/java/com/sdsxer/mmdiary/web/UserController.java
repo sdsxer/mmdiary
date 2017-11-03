@@ -54,7 +54,6 @@ public class UserController extends BaseController {
   @RequestMapping(value = "/user/login", method = RequestMethod.POST)
   public BaseResponse login(@RequestParam(value = "mobile") String mobile,
       @RequestParam(value = "password") String password) {
-
     BaseResponse loginResponse;
 
     // check mobile and password's format

@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -93,7 +94,7 @@ public class CommentController extends BaseController {
     // check authority
     long userId = tokenManager.getUserId(token);
     if(originalComment.getUser() == null || originalComment.getUser().getId() != userId) {
-      response = new FailureResponse(ErrorCode.Common.UNAUTHORIZED);
+      response = new FailureResponse(HttpStatus.UNAUTHORIZED);
       return response;
     }
 
@@ -169,7 +170,7 @@ public class CommentController extends BaseController {
     // check user's authority
     long userId = tokenManager.getUserId(token);
     if(comment.getUser() == null || comment.getUser().getId() != userId) {
-      response = new FailureResponse(ErrorCode.Common.UNAUTHORIZED);
+      response = new FailureResponse(HttpStatus.UNAUTHORIZED);
       return response;
     }
 

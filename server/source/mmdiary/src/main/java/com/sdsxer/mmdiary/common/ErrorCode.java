@@ -9,14 +9,12 @@ public class ErrorCode {
 
   public class Common {
     private static final int BASE = 1000;
-    public static final int SUCCEED = 0;
-    public static final int UNAUTHORIZED = BASE + 1;
-    public static final int ILLEGAL_PARAM = BASE + 2;
-    public static final int OPERATION_EXCEPTION = BASE + 3;
-    public static final int UNSUPPORTED_IMAGE_FORMAT = BASE + 4;
-    public static final int UNABLE_SAVE_FILE = BASE + 5;
-    public static final int UNSUPPORTED_IMAGE_SIZE = BASE + 6;
-    public static final int UNKNOWN = -1;
+    public static final int SUCCEED = 200;
+    public static final int ILLEGAL_PARAM = BASE + 1;
+    public static final int OPERATION_EXCEPTION = BASE + 2;
+    public static final int UNSUPPORTED_IMAGE_FORMAT = BASE + 3;
+    public static final int UNABLE_SAVE_FILE = BASE + 4;
+    public static final int UNSUPPORTED_IMAGE_SIZE = BASE + 5;
   }
 
   public class User {
@@ -61,8 +59,6 @@ public class ErrorCode {
 
   static {
     codeMessageMap.put(Common.SUCCEED, "请求成功");
-    codeMessageMap.put(Common.UNKNOWN, "未知错误");
-    codeMessageMap.put(Common.UNAUTHORIZED, "没有权限");
     codeMessageMap.put(Common.ILLEGAL_PARAM, "非法的参数");
     codeMessageMap.put(Common.OPERATION_EXCEPTION, "操作失败");
     codeMessageMap.put(Common.UNSUPPORTED_IMAGE_FORMAT, "图片格式不支持");
