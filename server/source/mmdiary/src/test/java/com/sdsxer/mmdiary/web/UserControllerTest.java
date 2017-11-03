@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -30,16 +31,13 @@ public class UserControllerTest {
 
   @Test
   public void login() throws Exception {
-
-    ResultActions resultActions =
-
-      mvc.perform(MockMvcRequestBuilders.post("/user/login")
+      mvc.perform(MockMvcRequestBuilders.post("/mmdiary/user/login")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .accept(MediaType.APPLICATION_JSON)
             .param("mobile", "18810789600")
-            .param("password", "E10ADC3949BA59ABBE56E057F20F883E"));
-//          .andExpect(MockMvcResultMatchers.status().isOk())
-
-    resultActions.andReturn().getResponse().setCharacterEncoding("UTF-8");
-    resultActions.andDo(MockMvcResultHandlers.print());
+            .param("password", "E10ADC3949BA59ABBE56E057F20F883E"))
+          .andExpect(MockMvcResultMatchers.status().isOk())
+          .andDo(MockMvcResultHandlers.print())
+          .andReturn();
   }
 }

@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@RequestMapping("/user")
 public class UserController extends BaseController {
 
   private static Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -51,9 +52,10 @@ public class UserController extends BaseController {
    * @param password
    * @return
    */
-  @RequestMapping(value = "/user/login", method = RequestMethod.POST)
+  @RequestMapping(value = "/login", method = RequestMethod.POST)
   public BaseResponse login(@RequestParam(value = "mobile") String mobile,
       @RequestParam(value = "password") String password) {
+
     BaseResponse loginResponse;
 
     // check mobile and password's format
@@ -106,7 +108,7 @@ public class UserController extends BaseController {
    * @param token
    * @return
    */
-  @RequestMapping(value = "/user/logout", method = RequestMethod.POST)
+  @RequestMapping(value = "/logout", method = RequestMethod.POST)
   public BaseResponse logout(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token) {
 
     BaseResponse response = null;
@@ -127,7 +129,7 @@ public class UserController extends BaseController {
    * @param avatar
    * @return
    */
-  @RequestMapping(value = "/user/profile/edit", method = RequestMethod.POST)
+  @RequestMapping(value = "/profile/edit", method = RequestMethod.POST)
   public BaseResponse editProfile(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
       @RequestParam("name") String name, @RequestParam("gender") int gender,
       @RequestParam(value = "avatar", required = false) MultipartFile avatar) {

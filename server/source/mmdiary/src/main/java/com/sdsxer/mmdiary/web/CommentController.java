@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/comment")
 public class CommentController extends BaseController {
 
   private static Logger logger = LoggerFactory.getLogger(CommentController.class);
@@ -40,7 +41,7 @@ public class CommentController extends BaseController {
    * @param content
    * @return
    */
-  @RequestMapping(value = "/comment/create", method = RequestMethod.POST)
+  @RequestMapping(value = "/create", method = RequestMethod.POST)
   public BaseResponse createDiary(@RequestParam("content") String content) {
 
     BaseResponse response = null;
@@ -72,7 +73,7 @@ public class CommentController extends BaseController {
    * @param content
    * @return
    */
-  @RequestMapping(value = "/comment/update", method = RequestMethod.POST)
+  @RequestMapping(value = "/update", method = RequestMethod.POST)
   public BaseResponse updateComment(@RequestParam(Constants.REQUEST_HEADER_TOKEN) String token,
   @RequestParam("id") long id, @RequestParam("content") String content) {
 
@@ -118,7 +119,7 @@ public class CommentController extends BaseController {
    * @param size
    * @return
    */
-  @RequestMapping(value = "/comment/retrieve/list", method = RequestMethod.POST)
+  @RequestMapping(value = "/retrieve/list", method = RequestMethod.POST)
   public BaseResponse retrieveCommentList(@RequestParam("index") long index,
       @RequestParam("size") int size) {
 
@@ -147,7 +148,7 @@ public class CommentController extends BaseController {
    * @param id
    * @return
    */
-  @RequestMapping(value = "/comment/delete", method = RequestMethod.POST)
+  @RequestMapping(value = "/delete", method = RequestMethod.POST)
   public BaseResponse deleteComment(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
       @RequestParam("id") long id) {
 

@@ -40,16 +40,16 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
   @Autowired
   private TokenManager tokenManager;
 
-  @Autowired
-  private Environment environment;
+//  @Autowired
+//  private Environment environment;
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    // disable token validation interceptor under dev environment
-    String[] profiles = environment.getActiveProfiles();
-    if(!ArrayUtils.contains(profiles, Constants.CONFIG_ENV_DEV)) {
+    // disable token validation interceptor under dev environment(deprecated, use test token instead)
+//    String[] profiles = environment.getActiveProfiles();
+//    if(!ArrayUtils.contains(profiles, Constants.CONFIG_ENV_DEV)) {
       registry.addInterceptor(new TokenValidationInterceptor()).addPathPatterns("/**");
-    }
+//    }
     super.addInterceptors(registry);
   }
 
@@ -63,17 +63,17 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         Object handler) throws Exception {
 
       ObjectMapper mapper = new ObjectMapper();
-      String requestServletPath = request.getServletPath();
+      String requestUri = request.getRequestURI();
 
       // empty request path, return error
-      if(Strings.isNullOrEmpty(requestServletPath)) {
+      if(Strings.isNullOrEmpty(requestUri)) {
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         returnJson(response, mapper.writeValueAsString(new FailureResponse(HttpStatus.BAD_REQUEST)));
         return false;
       }
 
       // login request, ignore
-      if(StringUtils.equalsIgnoreCase(requestServletPath, "/user/login")) {
+      if(StringUtils.equalsIgnoreCase(requestUri, "/mmdiary/user/login")) {
         return true;
       }
 

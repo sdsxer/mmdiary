@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@RequestMapping("/diary")
 public class DiaryController extends BaseController {
 
   private static Logger logger = LoggerFactory.getLogger(DiaryController.class);
@@ -59,7 +60,7 @@ public class DiaryController extends BaseController {
    * @param file
    * @return
    */
-  @RequestMapping(value = "/diary/create", method = RequestMethod.POST)
+  @RequestMapping(value = "/create", method = RequestMethod.POST)
   public BaseResponse createDiary(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
       @RequestParam("title") String title, @RequestParam("content") String content,
       @RequestParam("file") MultipartFile file) {
@@ -140,7 +141,7 @@ public class DiaryController extends BaseController {
    * @param file
    * @return
    */
-  @RequestMapping(value = "/diary/update", method = RequestMethod.POST)
+  @RequestMapping(value = "/update", method = RequestMethod.POST)
   public BaseResponse updateDiary(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
       @RequestParam("id") long id, @RequestParam("title") String title,
       @RequestParam("content") String content, @RequestParam("file") MultipartFile file) {
@@ -243,7 +244,7 @@ public class DiaryController extends BaseController {
    * @param id
    * @return
    */
-  @RequestMapping(value = "/diary/retrieve", method = RequestMethod.POST)
+  @RequestMapping(value = "/retrieve", method = RequestMethod.POST)
   public BaseResponse retrieveDiary(@RequestParam("id") long id) {
 
     BaseResponse response = null;
@@ -274,7 +275,7 @@ public class DiaryController extends BaseController {
    * @param size
    * @return
    */
-  @RequestMapping(value = "/diary/retrieve/list", method = RequestMethod.POST)
+  @RequestMapping(value = "/retrieve/list", method = RequestMethod.POST)
   public BaseResponse retrieveDiaryList(@RequestParam("index") int index,
       @RequestParam("size") int size) {
 
@@ -304,7 +305,7 @@ public class DiaryController extends BaseController {
    * @param id
    * @return
    */
-  @RequestMapping(value = "/diary/delete", method = RequestMethod.POST)
+  @RequestMapping(value = "/delete", method = RequestMethod.POST)
   public BaseResponse deleteDiary(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
       @RequestParam("id") long id) {
 
