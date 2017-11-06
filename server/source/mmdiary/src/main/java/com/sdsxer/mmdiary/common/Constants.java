@@ -7,6 +7,7 @@ package com.sdsxer.mmdiary.common;
 public class Constants {
 
   public static final String APP_NAME = "mmdiary";
+  public static final String CONTEXT_PATH = "/mmdiary";
 
   public static final int TOKEN_EXPIRES_HOUR = 72;
 
