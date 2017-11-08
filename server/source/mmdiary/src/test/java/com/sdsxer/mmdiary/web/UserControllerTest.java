@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockMultipartHttpServletRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -68,7 +67,8 @@ public class UserControllerTest {
   public void editProfile() throws Exception {
 
     FileInputStream fileInputStream = new FileInputStream("/Users/leon/Desktop/image/test1.png");
-    MockMultipartFile multipartFile = new MockMultipartFile("avatar", fileInputStream);
+    MockMultipartFile multipartFile = new MockMultipartFile("avatar", "test1.png",
+        "application/octet-stream", fileInputStream);
 
     mvc.perform(MockMvcRequestBuilders
         .fileUpload("/mmdiary/user/profile/edit")
@@ -82,5 +82,20 @@ public class UserControllerTest {
       .andExpect(MockMvcResultMatchers.status().isOk())
       .andDo(MockMvcResultHandlers.print())
       .andReturn();
+  }
+
+  @Test
+  public void modifyPassword() throws Exception {
+    mvc.perform(MockMvcRequestBuilders
+          .post("/mmdiary/user/password/modify")
+          .contextPath(Constant.CONTEXT_PATH)
+          .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+          .accept(MediaType.APPLICATION_JSON)
+          .header(Constant.HEADER_KEY_TOKEN, token)
+          .param("oldPassword", "E10ADC3949BA59ABBE56E057F20F883E")
+          .param("newPassword", "C33367701511B4F6020EC61DED352059"))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(MockMvcResultHandlers.print())
+        .andReturn();
   }
 }

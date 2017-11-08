@@ -205,7 +205,7 @@ public class UserController extends BaseController {
     }
 
     // delete old avatar if exist
-    if(avatarUpdated) {
+    if(avatarUpdated && !StringUtils.isEmpty(originalAvatarPath)) {
       try {
         Files.delete(Paths.get(storageService.getRootLocation()
             + File.separator + originalAvatarPath));
@@ -226,7 +226,7 @@ public class UserController extends BaseController {
    * @param newPassword md5 encrypted password
    * @return
    */
-  @RequestMapping(value = "/user/password/modify", method = RequestMethod.POST)
+  @RequestMapping(value = "/password/modify", method = RequestMethod.POST)
   public BaseResponse modifyPassword(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
       @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword) {
 
