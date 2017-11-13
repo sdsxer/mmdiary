@@ -2,8 +2,8 @@ package com.sdsxer.mmdiary;
 
 
 import com.sdsxer.mmdiary.common.Constants;
+import com.sdsxer.mmdiary.config.AppConfig;
 import com.sdsxer.mmdiary.config.StorageProperties;
-import com.sdsxer.mmdiary.global.HostInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +23,14 @@ import org.springframework.web.servlet.DispatcherServlet;
  * Created by leon on 2017/9/14.
  */
 @SpringBootApplication
-@EnableConfigurationProperties(StorageProperties.class)
+@EnableConfigurationProperties({StorageProperties.class, AppConfig.class})
 public class MMDiaryApplication extends SpringBootServletInitializer implements
     EmbeddedServletContainerCustomizer {
 
   private static Logger logger = LoggerFactory.getLogger(MMDiaryApplication.class);
 
-  @Autowired
-  private HostInfo hostInfo;
+//  @Autowired
+//  private HostInterface hostInfo;
 
   // war entry
   @Override
@@ -44,20 +44,19 @@ public class MMDiaryApplication extends SpringBootServletInitializer implements
     SpringApplication.run(MMDiaryApplication.class, args);
   }
 
-  // custom listening port
+  // custom server config
   @Override
   public void customize(ConfigurableEmbeddedServletContainer container) {
-    logger.info("Server listening port: {}", hostInfo.getListeningPort());
-    container.setPort(hostInfo.getListeningPort());
+//    logger.info("Service listening port: {}", hostInfo.getListeningPort());
+//    container.setPort(hostInfo.getListeningPort());
   }
 
   // set 404 response handler
-  @Bean
-  public ServletRegistrationBean dispatcherRegistration(DispatcherServlet dispatcherServlet) {
-    ServletRegistrationBean registration = new ServletRegistrationBean(dispatcherServlet);
-    // 当出现 404 错误时, 直接抛出异常
-    dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
-    // 不要为工程中的资源文件建立映射
-    return registration;
-  }
+//  @Bean
+//  public ServletRegistrationBean dispatcherRegistration(DispatcherServlet dispatcherServlet) {
+//    ServletRegistrationBean registration = new ServletRegistrationBean(dispatcherServlet);
+//    dispatcherServlet.setThrowExceptionIfNoHandlerFound(true); // 当出现 404 错误时, 直接抛出异常
+//    // 不要为工程中的资源文件建立映射
+//    return registration;
+//  }
 }

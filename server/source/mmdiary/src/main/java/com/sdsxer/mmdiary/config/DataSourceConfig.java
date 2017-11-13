@@ -7,6 +7,7 @@ import org.h2.server.web.WebServlet;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -29,6 +30,7 @@ public class DataSourceConfig {
    */
   @Profile(Constants.CONFIG_ENV_DEV)
   @Bean(destroyMethod = "shutdown")
+  @Primary
   public DataSource dataSourceEmbedded() {
     return new EmbeddedDatabaseBuilder()
         .setType(EmbeddedDatabaseType.H2)
@@ -54,7 +56,7 @@ public class DataSourceConfig {
    */
   @Profile(Constants.CONFIG_ENV_QA)
   @Bean(destroyMethod = "close")
-  public BasicDataSource dataSourcePool() {
+  public DataSource dataSourcePool() {
     BasicDataSource basicDataSource = new BasicDataSource();
     basicDataSource.setDriverClassName("com.mysql.jdbc.Driver");
     basicDataSource.setUrl("jdbc:mysql://localhost:3306/mmdiary");

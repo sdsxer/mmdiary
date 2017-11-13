@@ -37,6 +37,7 @@ public class Constants {
   public static final int DIARY_COVER_WIDTH = 200;
   public static final int DIARY_COVER_HEIGHT = 150;
 
+  public static final String CONFIG_ENV_TEST = "test";
   public static final String CONFIG_ENV_DEV = "dev";
   public static final String CONFIG_ENV_QA = "qa";
   public static final String CONFIG_ENV_PROD = "prod";
