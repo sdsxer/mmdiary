@@ -21,9 +21,12 @@ public class CommentService {
   @Autowired
   private CommentDao commentDao;
 
-  public Comment createComment(String content) {
+  public Comment createComment(int diaryId, String content) {
     Comment comment = new Comment();
     comment.setContent(content);
+    Diary diary = new Diary();
+    diary.setId(diaryId);
+    comment.setDiary(diary);
     Date now = new Date();
     comment.setCreateTime(now);
     comment.setLastModifiedTime(now);

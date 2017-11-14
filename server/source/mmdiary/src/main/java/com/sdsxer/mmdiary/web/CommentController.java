@@ -42,24 +42,32 @@ public class CommentController extends BaseController {
    * @return
    */
   @RequestMapping(value = "/create", method = RequestMethod.POST)
-  public BaseResponse createDiary(@RequestParam("content") String content) {
+  public BaseResponse createDiary(@RequestParam("diaryId") int diaryId,
+      @RequestParam("content") String content) {
 
     BaseResponse response = null;
 
     // check param's legality
+    if(diaryId <= 0) {
+      response = new FailureResponse(ErrorCode.Comment.ILLEGAL_DIARY_ID);
+      return response;
+    }
     if(StringUtils.isEmpty(content)) {
       response = new FailureResponse(ErrorCode.Comment.EMPTY_CONTENT);
       return response;
     }
 
     // create comment
-    Comment comment = commentService.createComment(content);
+    Comment comment = commentService.createComment(diaryId, content);
 
     // operation exception
     if(comment == null) {
       response = new FailureResponse(ErrorCode.Common.OPERATION_EXCEPTION);
       return response;
     }
+
+    // no need return diary info
+    comment.setDiary(null);
 
     // encapsulate response
     response = new CreateCommentResponse(comment);
@@ -100,7 +108,7 @@ public class CommentController extends BaseController {
     }
 
     // create comment
-    Comment comment = commentService.createComment(content);
+    Comment comment = commentService.updateComment(content);
 
     // operation exception
     if(comment == null) {

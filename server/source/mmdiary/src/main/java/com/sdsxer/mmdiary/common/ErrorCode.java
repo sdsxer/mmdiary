@@ -55,6 +55,7 @@ public class ErrorCode {
     private static final int BASE = 1300;
     public static final int EMPTY_CONTENT = BASE + 1;
     public static final int COMMENT_NOT_EXIST = BASE + 2;
+    public static final int ILLEGAL_DIARY_ID = BASE + 3;
   }
 
   static {
@@ -96,6 +97,7 @@ public class ErrorCode {
 
     codeMessageMap.put(Comment.EMPTY_CONTENT, "评论内容不能为空");
     codeMessageMap.put(Comment.COMMENT_NOT_EXIST, "评论不存在");
+    codeMessageMap.put(Comment.ILLEGAL_DIARY_ID, "非法的日志ID");
   }
 
   public static String getErrorMessage(int errorCode) {

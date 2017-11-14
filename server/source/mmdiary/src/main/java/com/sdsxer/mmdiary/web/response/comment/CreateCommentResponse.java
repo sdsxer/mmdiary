@@ -10,4 +10,12 @@ public class CreateCommentResponse extends SuccessResponse {
   public CreateCommentResponse(Comment comment) {
     this.comment = comment;
   }
+
+  public Comment getComment() {
+    return comment;
+  }
+
+  public void setComment(Comment comment) {
+    this.comment = comment;
+  }
 }
