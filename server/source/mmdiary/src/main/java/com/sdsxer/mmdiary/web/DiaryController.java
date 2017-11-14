@@ -225,7 +225,7 @@ public class DiaryController extends BaseController {
     }
 
     // delete old cover image
-    if(coverImageUpdated) {
+    if(coverImageUpdated && !StringUtils.isEmpty(originalCoverImagePath)) {
       try {
         Files.delete(Paths.get(storageService.getRootLocation()
             + File.separator + originalCoverImagePath));

@@ -16,6 +16,7 @@ public class PageDto {
   public PageDto(Page page, Converter converter) {
     totalPages = page.getTotalPages();
     totalItems = page.getTotalElements();
+    pageSize = page.getSize();
     Iterator iterator = page.iterator();
     while (iterator.hasNext()) {
       list.add(converter.convert(iterator.next()));
@@ -32,5 +33,13 @@ public class PageDto {
 
   public List getList() {
     return list;
+  }
+
+  public int getPageSize() {
+    return pageSize;
+  }
+
+  public void setPageSize(int pageSize) {
+    this.pageSize = pageSize;
   }
 }
