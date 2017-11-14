@@ -143,6 +143,7 @@ public class CommentController extends BaseController {
     Page<Comment> commentPage = commentService.retrieveCommentList(index, size);
     if(commentPage == null) {
       response = new FailureResponse(ErrorCode.Common.OPERATION_EXCEPTION);
+      return response;
     }
 
     // encapsulate response
