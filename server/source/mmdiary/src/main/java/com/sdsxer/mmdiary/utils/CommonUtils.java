@@ -1,14 +1,13 @@
 package com.sdsxer.mmdiary.utils;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 public class CommonUtils {
 
-  public static String getIntegrateUrl(String relativePath) {
-    StringBuilder builder = new StringBuilder();
-    builder.append("http://");
-//    builder.append();
-    builder.append(":");
-//    builder.append()
-    return null;
+  public static String printStackTraceToString(Throwable t) {
+    StringWriter sw = new StringWriter();
+    t.printStackTrace(new PrintWriter(sw, true));
+    return sw.getBuffer().toString();
   }
-
 }

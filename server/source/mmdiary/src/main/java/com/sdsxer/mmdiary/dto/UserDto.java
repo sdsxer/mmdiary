@@ -14,13 +14,15 @@ public class UserDto {
   private int gender;
 
   public UserDto(User user) {
-    this.id = user.getId();
-    this.name = user.getName();
-    this.mobile = user.getMobile();
-    if(!StringUtils.isEmpty(user.getAvatarUrl())) {
-      this.avatarUrl = HostUtils.getIntegrateUrl(user.getAvatarUrl());
+    if(user != null) {
+      this.id = user.getId();
+      this.name = user.getName();
+      this.mobile = user.getMobile();
+      if (!StringUtils.isEmpty(user.getAvatarUrl())) {
+        this.avatarUrl = HostUtils.getIntegrateUrl(user.getAvatarUrl());
+      }
+      this.gender = user.getGender();
     }
-    this.gender = user.getGender();
   }
 
   public long getId() {

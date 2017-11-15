@@ -28,13 +28,13 @@ public class CommentControllerTest extends BasicControllerTest {
   @Test
   public void updateComment() throws Exception {
     mvc.perform(MockMvcRequestBuilders
-        .post("/mmdiary/comment/update")
-        .contextPath(Constant.CONTEXT_PATH)
-        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-        .accept(MediaType.APPLICATION_JSON)
-        .header(Constant.HEADER_KEY_TOKEN, token)
-        .param("id", "1")
-        .param("content", "ol ol ol"))
+          .post("/mmdiary/comment/update")
+          .contextPath(Constant.CONTEXT_PATH)
+          .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+          .accept(MediaType.APPLICATION_JSON)
+          .header(Constant.HEADER_KEY_TOKEN, token)
+          .param("id", "1")
+          .param("content", "ol ol ol"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(MockMvcResultHandlers.print())
         .andReturn();
@@ -43,12 +43,12 @@ public class CommentControllerTest extends BasicControllerTest {
   @Test
   public void deleteComment() throws Exception {
     mvc.perform(MockMvcRequestBuilders
-        .post("/mmdiary/comment/delete")
-        .contextPath(Constant.CONTEXT_PATH)
-        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-        .accept(MediaType.APPLICATION_JSON)
-        .header(Constant.HEADER_KEY_TOKEN, token)
-        .param("id", "2"))
+          .post("/mmdiary/comment/delete")
+          .contextPath(Constant.CONTEXT_PATH)
+          .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+          .accept(MediaType.APPLICATION_JSON)
+          .header(Constant.HEADER_KEY_TOKEN, token)
+          .param("id", "2"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(MockMvcResultHandlers.print())
         .andReturn();
@@ -57,13 +57,14 @@ public class CommentControllerTest extends BasicControllerTest {
   @Test
   public void retrieveCommentList() throws Exception {
     mvc.perform(MockMvcRequestBuilders
-        .post("/mmdiary/comment/retrieve/list")
-        .contextPath(Constant.CONTEXT_PATH)
-        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-        .accept(MediaType.APPLICATION_JSON)
-        .header(Constant.HEADER_KEY_TOKEN, token)
-        .param("index", "0")
-        .param("size", "20"))
+          .post("/mmdiary/comment/retrieve/list")
+          .contextPath(Constant.CONTEXT_PATH)
+          .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+          .accept(MediaType.APPLICATION_JSON)
+          .header(Constant.HEADER_KEY_TOKEN, token)
+          .param("diaryId", "1")
+          .param("index", "0")
+          .param("size", "20"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(MockMvcResultHandlers.print())
         .andReturn();

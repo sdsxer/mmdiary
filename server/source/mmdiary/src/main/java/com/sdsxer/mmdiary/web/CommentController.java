@@ -42,8 +42,8 @@ public class CommentController extends BaseController {
    * @return
    */
   @RequestMapping(value = "/create", method = RequestMethod.POST)
-  public BaseResponse createDiary(@RequestParam("diaryId") int diaryId,
-      @RequestParam("content") String content) {
+  public BaseResponse createDiary(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
+      @RequestParam("diaryId") int diaryId, @RequestParam("content") String content) {
 
     BaseResponse response = null;
 
@@ -58,7 +58,7 @@ public class CommentController extends BaseController {
     }
 
     // create comment
-    Comment comment = commentService.createComment(diaryId, content);
+    Comment comment = commentService.createComment(tokenManager.getUserId(token), diaryId, content);
 
     // operation exception
     if(comment == null) {
@@ -82,7 +82,7 @@ public class CommentController extends BaseController {
    * @return
    */
   @RequestMapping(value = "/update", method = RequestMethod.POST)
-  public BaseResponse updateComment(@RequestParam(Constants.REQUEST_HEADER_TOKEN) String token,
+  public BaseResponse updateComment(@RequestHeader(Constants.REQUEST_HEADER_TOKEN) String token,
   @RequestParam("id") long id, @RequestParam("content") String content) {
 
     BaseResponse response = null;
@@ -108,7 +108,7 @@ public class CommentController extends BaseController {
     }
 
     // create comment
-    Comment comment = commentService.updateComment(content);
+    Comment comment = commentService.updateComment(id, content);
 
     // operation exception
     if(comment == null) {
@@ -123,24 +123,25 @@ public class CommentController extends BaseController {
 
   /**
    * retrieve comment list
+   * @param diaryId
    * @param index
    * @param size
    * @return
    */
   @RequestMapping(value = "/retrieve/list", method = RequestMethod.POST)
-  public BaseResponse retrieveCommentList(@RequestParam("index") long index,
-      @RequestParam("size") int size) {
+  public BaseResponse retrieveCommentList(@RequestParam("diaryId") long diaryId,
+      @RequestParam("index") long index, @RequestParam("size") int size) {
 
     BaseResponse response = null;
 
     // check params's legality
-    if(index < 0 || size <= 0) {
+    if(diaryId <= 0 || index < 0 || size <= 0) {
       response = new FailureResponse(ErrorCode.Common.ILLEGAL_PARAM);
       return response;
     }
 
     // retrieve comment list
-    Page<Comment> commentPage = commentService.retrieveCommentList(index, size);
+    Page<Comment> commentPage = commentService.retrieveCommentList(diaryId, index, size);
     if(commentPage == null) {
       response = new FailureResponse(ErrorCode.Common.OPERATION_EXCEPTION);
       return response;

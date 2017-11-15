@@ -41,11 +41,9 @@ public class UserControllerTest extends BasicControllerTest {
 
   @Test
   public void editProfile() throws Exception {
-
     FileInputStream fileInputStream = new FileInputStream("/Users/leon/Desktop/image/test1.png");
     MockMultipartFile multipartFile = new MockMultipartFile("avatar", "test1.png",
         "application/octet-stream", fileInputStream);
-
     mvc.perform(MockMvcRequestBuilders
         .fileUpload("/mmdiary/user/profile/edit")
         .file(multipartFile)

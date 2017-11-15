@@ -18,3 +18,11 @@ INSERT INTO `comment`(`id`, `content`, `create_time`, `last_modified_time`, `use
 INSERT INTO `comment`(`id`, `content`, `create_time`, `last_modified_time`, `user_id`, `diary_id`) VALUES (2, '呵呵', '2017-06-10 06:22:11', '2017-06-10 06:22:11', 1, 1);
 INSERT INTO `comment`(`id`, `content`, `create_time`, `last_modified_time`, `user_id`, `diary_id`) VALUES (3, '哦哦', '2017-06-10 06:22:11', '2017-06-10 06:22:11', 1, 1);
 INSERT INTO `comment`(`id`, `content`, `create_time`, `last_modified_time`, `user_id`, `diary_id`) VALUES (4, '啦啦', '2017-06-10 06:22:11', '2017-06-10 06:22:11', 1, 1);
+INSERT INTO `comment`(`id`, `content`, `create_time`, `last_modified_time`, `user_id`, `diary_id`) VALUES (5, '哈哈哈', '2017-06-10 06:22:11', '2017-06-10 06:22:11', 2, 1);
+INSERT INTO `comment`(`id`, `content`, `create_time`, `last_modified_time`, `user_id`, `diary_id`) VALUES (6, '呵呵呵', '2017-06-10 06:22:11', '2017-06-10 06:22:11', 2, 1);
+INSERT INTO `comment`(`id`, `content`, `create_time`, `last_modified_time`, `user_id`, `diary_id`) VALUES (7, '哦哦哦', '2017-06-10 06:22:11', '2017-06-10 06:22:11', 2, 1);
+INSERT INTO `comment`(`id`, `content`, `create_time`, `last_modified_time`, `user_id`, `diary_id`) VALUES (8, '啦啦啦', '2017-06-10 06:22:11', '2017-06-10 06:22:11', 2, 1);
+INSERT INTO `comment`(`id`, `content`, `create_time`, `last_modified_time`, `user_id`, `diary_id`) VALUES (9, '哈哈哈哈', '2017-06-10 06:22:11', '2017-06-10 06:22:11', 3, 2);
+INSERT INTO `comment`(`id`, `content`, `create_time`, `last_modified_time`, `user_id`, `diary_id`) VALUES (10, '呵呵呵呵', '2017-06-10 06:22:11', '2017-06-10 06:22:11', 3, 2);
+INSERT INTO `comment`(`id`, `content`, `create_time`, `last_modified_time`, `user_id`, `diary_id`) VALUES (11, '哦哦哦哦', '2017-06-10 06:22:11', '2017-06-10 06:22:11', 3, 2);
+INSERT INTO `comment`(`id`, `content`, `create_time`, `last_modified_time`, `user_id`, `diary_id`) VALUES (12, '啦啦啦啦', '2017-06-10 06:22:11', '2017-06-10 06:22:11', 3, 2);

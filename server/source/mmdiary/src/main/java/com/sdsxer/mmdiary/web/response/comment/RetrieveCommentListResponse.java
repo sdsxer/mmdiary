@@ -2,17 +2,27 @@ package com.sdsxer.mmdiary.web.response.comment;
 
 import com.sdsxer.mmdiary.domain.Comment;
 import com.sdsxer.mmdiary.dto.CommentDto;
+import com.sdsxer.mmdiary.dto.PageDto;
 import com.sdsxer.mmdiary.web.response.SuccessResponse;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 
 public class RetrieveCommentListResponse extends SuccessResponse {
 
-  private Page<CommentDto> commentPage;
+  private PageDto page;
 
   public RetrieveCommentListResponse(Page<Comment> commentPage) {
-    this.commentPage = commentPage.map(new CommentConverter());
+    this.page = new PageDto(commentPage, new CommentConverter());
   }
+
+  public PageDto getPage() {
+    return page;
+  }
+
+  public void setPage(PageDto page) {
+    this.page = page;
+  }
+
 
   class CommentConverter implements Converter<Comment, CommentDto> {
 

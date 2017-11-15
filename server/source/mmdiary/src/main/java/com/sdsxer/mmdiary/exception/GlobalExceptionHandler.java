@@ -1,5 +1,6 @@
 package com.sdsxer.mmdiary.exception;
 
+import com.sdsxer.mmdiary.utils.CommonUtils;
 import com.sdsxer.mmdiary.web.response.FailureResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,8 @@ public class GlobalExceptionHandler {
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ResponseBody
   public FailureResponse unknownException(Exception e) {
-    return new FailureResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getClass().getName());
+    return new FailureResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        CommonUtils.printStackTraceToString(e));
   }
 
   @ExceptionHandler(value = { MMException.class })
