@@ -1,5 +1,6 @@
 package com.sdsxer.mmdiary.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -14,11 +15,14 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
 
+  @Autowired
+  private AppConfig appConfig;
+
   @Bean
   public JedisConnectionFactory jedisConnectionFactory() {
     JedisConnectionFactory jedisConFactory = new JedisConnectionFactory();
-    jedisConFactory.setHostName("localhost");
-    jedisConFactory.setPort(6379);
+    jedisConFactory.setHostName(appConfig.getRedisServerAddress());
+    jedisConFactory.setPort(appConfig.getRedisServerPort());
     return jedisConFactory;
   }
 

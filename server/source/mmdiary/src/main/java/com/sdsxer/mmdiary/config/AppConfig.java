@@ -7,6 +7,8 @@ public class AppConfig {
 
   private String staticResourceServerAddress;
   private int staticResourceServerPort;
+  private String redisServerAddress;
+  private int redisServerPort;
 
   public String getStaticResourceServerAddress() {
     return staticResourceServerAddress;
@@ -22,5 +24,21 @@ public class AppConfig {
 
   public void setStaticResourceServerPort(int staticResourceServerPort) {
     this.staticResourceServerPort = staticResourceServerPort;
+  }
+
+  public String getRedisServerAddress() {
+    return redisServerAddress;
+  }
+
+  public void setRedisServerAddress(String redisServerAddress) {
+    this.redisServerAddress = redisServerAddress;
+  }
+
+  public int getRedisServerPort() {
+    return redisServerPort;
+  }
+
+  public void setRedisServerPort(int redisServerPort) {
+    this.redisServerPort = redisServerPort;
   }
 }
